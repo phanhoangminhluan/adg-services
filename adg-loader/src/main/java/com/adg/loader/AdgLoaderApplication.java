@@ -1,11 +1,11 @@
-package com.adg.scheduler;
+package com.adg.loader;
 
 import com.merlin.asset.core.starter.ServerApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(
-        scanBasePackages = {"com.adg.scheduler"}
+        scanBasePackages = {"com.adg.loader"}
 )
-public class AdgSchedulerApplication extends ServerApplication {
+public class AdgLoaderApplication extends ServerApplication {
 
 }

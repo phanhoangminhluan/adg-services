@@ -12,7 +12,16 @@
         <module>adg-scheduler</module>
         <module>adg-loader</module>
         <module>adg-core</module>
+        <module>adg-server</module>
     </modules>
+
+    <repositories>
+        <repository>
+            <id>project.local</id>
+            <name>project</name>
+            <url>file:/Users/luan.phm/engineering/Projects/merlin/merlin-asset/deployed-jar</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
