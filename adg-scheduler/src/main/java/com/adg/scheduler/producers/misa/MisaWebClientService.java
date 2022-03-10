@@ -1,4 +1,4 @@
-package com.adg.scheduler.api.misa;
+package com.adg.scheduler.producers.misa;
 
 import com.adg.scheduler.common.enums.MisaEndpoints;
 import com.merlin.asset.core.utils.MapUtils;
@@ -57,7 +57,7 @@ public class MisaWebClientService {
                     .build();
         }
 
-        String bearerToken = retrieveBearerToken();
+        String bearerToken = "Bearer " + retrieveBearerToken();
 
         this.webClient = WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
@@ -66,7 +66,7 @@ public class MisaWebClientService {
                 .build();
     }
 
-    private String retrieveBearerToken() {
+     public String retrieveBearerToken() {
         Mono<Map<String, Object>> result = this.authWebClient
                 .post()
                 .uri(MisaEndpoints.ACCOUNT.uri)
@@ -77,13 +77,15 @@ public class MisaWebClientService {
                         .build()), Map.class)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<>() {});
+
         Map<String, Object> response = result.block();
 
         return MapUtils.getString(response, "data");
     }
 
+    // TODO: handle re run retrieveBearerToken()
     public Map<String, Object> get(Function<UriBuilder, URI> uriFunction) {
-        Mono<Map<String, Object>> result = this.authWebClient
+        Mono<Map<String, Object>> result = this.webClient
                 .get()
                 .uri(uriFunction)
                 .accept(MediaType.APPLICATION_JSON)
@@ -93,7 +95,7 @@ public class MisaWebClientService {
     }
 
     public Map<String, Object> post(Function<UriBuilder, URI> uriFunction, Map<String, Object> body) {
-        Mono<Map<String, Object>> result = this.authWebClient
+        Mono<Map<String, Object>> result = this.webClient
                 .post()
                 .uri(uriFunction)
                 .accept(MediaType.APPLICATION_JSON)
@@ -104,8 +106,7 @@ public class MisaWebClientService {
     }
 
     public Map<String, Object> put(Function<UriBuilder, URI> uriFunction, Map<String, Object> body) {
-
-        Mono<Map<String, Object>> result = this.authWebClient
+        Mono<Map<String, Object>> result = this.webClient
                 .put()
                 .uri(uriFunction)
                 .accept(MediaType.APPLICATION_JSON)

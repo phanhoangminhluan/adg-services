@@ -32,7 +32,7 @@ public abstract class AdgAbstractSubscriber<K, V> extends AbstractSubscriber<K, 
 
     @Override
     public final String getGroupId() {
-        return this.getTopic().kafkaGroupId;
+        return this.getTopic().groupId;
     }
 
     @Override

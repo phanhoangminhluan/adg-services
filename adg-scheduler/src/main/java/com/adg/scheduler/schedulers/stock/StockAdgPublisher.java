@@ -17,7 +17,7 @@ public class StockAdgPublisher extends AdgAbstractPublisher<String, String> {
 
     @Override
     protected Topic getTopic() {
-        return Topic.SYNC_STOCK;
+        return Topic.STOCK;
     }
 
     @Override

@@ -34,7 +34,7 @@ public abstract class AdgAbstractPublisher<K, V> extends AbstractPublisher<K, V>
 
     @Override
     public final String getGroupId() {
-        return this.getTopic().kafkaGroupId;
+        return this.getTopic().groupId;
     }
 
     @Override
