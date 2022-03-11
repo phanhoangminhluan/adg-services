@@ -1,18 +1,18 @@
 package com.adg.scheduler.controller;
 
 import com.adg.scheduler.producers.misa.MisaWebClientService;
+import com.adg.scheduler.producers.misa.customer.CustomerProducerService;
 import com.adg.scheduler.producers.misa.customer.CustomerWebClientService;
+import com.adg.scheduler.producers.misa.order.SaleOrderProducerService;
+import com.adg.scheduler.producers.misa.product.ProductProducerService;
 import com.adg.scheduler.producers.misa.product.ProductWebClientService;
 import com.adg.scheduler.producers.misa.order.SaleOrderWebClientService;
-import com.adg.scheduler.producers.misa.stock.StockService;
+import com.adg.scheduler.producers.misa.stock.StockProducerService;
 import com.adg.scheduler.producers.misa.stock.StockWebClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Minh-Luan H. Phan
@@ -38,7 +38,16 @@ public class HomeController {
     private CustomerWebClientService customerWebClientService;
 
     @Autowired
-    private StockService stockService;
+    private StockProducerService stockProducerService;
+
+    @Autowired
+    private ProductProducerService productProducerService;
+
+    @Autowired
+    private SaleOrderProducerService saleOrderProducerService;
+
+    @Autowired
+    private CustomerProducerService customerProducerService;
 
     @GetMapping("/account")
     public String home() {
@@ -47,27 +56,25 @@ public class HomeController {
 
     @GetMapping("/stocks")
     public String getStocks() {
-
-        stockService.pushToKafka();
-
+        this.stockProducerService.fetchThenProduce();
         return "ok";
     }
 
     @GetMapping("/products")
     public String getProducts() {
-        productWebClientService.getProducts();
+        productProducerService.fetchThenProduce();
         return "ok";
     }
 
     @GetMapping("/orders")
     public String getSaleOrders() {
-        saleOrderWebClientService.getSaleOrders();
+        saleOrderProducerService.fetchThenProduce();
         return "ok";
     }
 
     @GetMapping("/customers")
     public String getCustomers() {
-        customerWebClientService.getCustomers();
+        customerProducerService.fetchThenProduce();
         return "ok";
     }
 }

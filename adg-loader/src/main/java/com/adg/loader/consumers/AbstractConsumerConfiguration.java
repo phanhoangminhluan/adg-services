@@ -1,6 +1,5 @@
 package com.adg.loader.consumers;
 
-import com.adg.core.common.enums.Topic;
 import com.merlin.asset.core.utils.MapUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -20,12 +19,12 @@ public abstract class AbstractConsumerConfiguration {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServer;
 
-    protected abstract Topic getTopic();
+    protected abstract String getGroupId();
 
     protected ConsumerFactory<String, String> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(MapUtils.ImmutableMap()
-                .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer)
-                .put(ConsumerConfig.GROUP_ID_CONFIG, this.getTopic().groupId)
+                .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, this.bootstrapServer)
+                .put(ConsumerConfig.GROUP_ID_CONFIG, this.getGroupId())
                 .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
                 .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
                 .build()

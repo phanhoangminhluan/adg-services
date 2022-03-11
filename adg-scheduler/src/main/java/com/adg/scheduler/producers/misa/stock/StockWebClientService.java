@@ -1,8 +1,7 @@
 package com.adg.scheduler.producers.misa.stock;
 
-import com.adg.scheduler.producers.misa.MisaWebClientService;
+import com.adg.scheduler.producers.misa.AbstractWebClientService;
 import com.merlin.asset.core.utils.MapUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,14 +12,16 @@ import java.util.Map;
  * Created on: 2022.03.10 13:42
  */
 @Component
-public class StockWebClientService {
+public class StockWebClientService extends AbstractWebClientService {
 
-    @Autowired
-    private MisaWebClientService misaWebClientService;
-
-    public List<Map<String, Object>> getStocks() {
-        Map<String, Object> responseMap = misaWebClientService.get((uriBuilder -> uriBuilder.path("stocks").build()));
+    @Override
+    protected List<Map<String, Object>> fetchItems(int page) {
+        Map<String, Object> responseMap = this.misaWebClientService.get((uriBuilder -> uriBuilder.path(this.getUriPath()).build()));
         return MapUtils.getListMapStringObject(responseMap, "data");
     }
 
+    @Override
+    protected String getUriPath() {
+        return "stocks";
+    }
 }

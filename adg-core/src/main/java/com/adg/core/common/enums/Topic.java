@@ -1,11 +1,11 @@
 package com.adg.core.common.enums;
 
 
-import com.adg.core.common.constants.ConsumerConstants;
+import com.adg.core.common.constants.PubSubConstants;
 
 public enum Topic {
     STOCK(
-            ConsumerConstants.STOCK_TOPIC_NAME,
+            PubSubConstants.Stock.TOPIC_NAME,
             3,
             "data-sink: postgresql, table: stock",
             3000

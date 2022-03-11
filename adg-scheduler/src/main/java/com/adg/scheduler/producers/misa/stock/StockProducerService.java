@@ -1,30 +1,42 @@
 package com.adg.scheduler.producers.misa.stock;
 
-import com.adg.core.common.constants.ConsumerConstants;
+import com.adg.core.common.constants.PubSubConstants;
+import com.adg.scheduler.producers.misa.AbstractProducerService;
 import com.merlin.asset.core.utils.JsonUtils;
-import com.merlin.asset.core.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Minh-Luan H. Phan
- * Created on: 2022.03.10 23:59
+ * Created on: 2022.03.11 00:04
  */
 @Component
-public class StockProducerService {
+public class StockProducerService extends AbstractProducerService<StockWebClientService> {
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private StockWebClientService stockWebClientService;
 
-    public void produce(List<Map<String, Object>> result) {
-        result.forEach(map -> {
-            String json = JsonUtils.toJson(map);
-            System.out.printf("async_id: %s -- modified_date: %s --- Json: %s\n", MapUtils.getString(map, "async_id"), MapUtils.getString(map, "modified_date"), json);
-            kafkaTemplate.send(ConsumerConstants.STOCK_TOPIC_NAME, json);
-        });
+    @Override
+    protected StockWebClientService getWebClientService() {
+        return this.stockWebClientService;
+    }
+
+    @Override
+    protected String getTopicName() {
+        return PubSubConstants.Stock.TOPIC_NAME;
+    }
+
+    @Override
+    public void fetchThenProduce() {
+        List<Map<String, Object>> items = this.getWebClientService().fetchItems(1);
+        items.stream()
+                .map(JsonUtils::toJson)
+                .collect(Collectors.toList())
+                .forEach(item -> kafkaTemplate.send(this.getTopicName(), item));
+
     }
 }

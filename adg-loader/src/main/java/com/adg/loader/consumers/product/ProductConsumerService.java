@@ -1,4 +1,4 @@
-package com.adg.loader.consumers.stock;
+package com.adg.loader.consumers.product;
 
 import com.adg.core.common.constants.PubSubConstants;
 import com.adg.loader.consumers.AbstractConsumerService;
@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Minh-Luan H. Phan
- * Created on: 2022.03.10 23:35
+ * Created on: 2022.03.11 11:52
  */
 @Component
-public class StockConsumerService extends AbstractConsumerService {
+public class ProductConsumerService extends AbstractConsumerService {
 
     @KafkaListener(
-            topics = PubSubConstants.Stock.TOPIC_NAME,
-            containerFactory = PubSubConstants.Stock.LISTENER_CONTAINER_FACTORY
+            topics = PubSubConstants.Product.TOPIC_NAME,
+            containerFactory = PubSubConstants.Product.LISTENER_CONTAINER_FACTORY
     )
     @Override
     public void consume(String message) {
