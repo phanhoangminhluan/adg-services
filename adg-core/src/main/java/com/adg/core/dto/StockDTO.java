@@ -1,4 +1,4 @@
-package com.adg.core.entity;
+package com.adg.core.dto;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
  * Created on: 2022.03.08 16:47
  */
 @Data
-public class StockEntity {
+public class StockDTO {
 
     private String asyncId;
     private int id;
