@@ -17,9 +17,14 @@
 
     <repositories>
         <repository>
-            <id>project.local</id>
-            <name>project</name>
+            <id>merlin-asset.local</id>
+            <name>merlin-asset</name>
             <url>file:/Users/luan.phm/engineering/Projects/merlin/merlin-asset/deployed-jar</url>
+        </repository>
+        <repository>
+            <id>merlin-mapper.local</id>
+            <name>merlin-mapper</name>
+            <url>file:/Users/luan.phm/engineering/Projects/merlin/merlin-mapper/deployed-jar</url>
         </repository>
     </repositories>
 
@@ -58,6 +63,12 @@
             <groupId>com.merlin</groupId>
             <artifactId>merlin-asset</artifactId>
             <version>0.0.8-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.merlin</groupId>
+            <artifactId>merlin-mapper</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
