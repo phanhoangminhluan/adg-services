@@ -2,13 +2,9 @@ package com.adg.scheduler.controller;
 
 import com.adg.scheduler.producers.misa.MisaWebClientService;
 import com.adg.scheduler.producers.misa.customer.CustomerProducerService;
-import com.adg.scheduler.producers.misa.customer.CustomerWebClientService;
 import com.adg.scheduler.producers.misa.order.SaleOrderProducerService;
 import com.adg.scheduler.producers.misa.product.ProductProducerService;
-import com.adg.scheduler.producers.misa.product.ProductWebClientService;
-import com.adg.scheduler.producers.misa.order.SaleOrderWebClientService;
 import com.adg.scheduler.producers.misa.stock.StockProducerService;
-import com.adg.scheduler.producers.misa.stock.StockWebClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,18 +20,6 @@ public class HomeController {
 
     @Autowired
     private MisaWebClientService misaWebClientService;
-
-    @Autowired
-    private StockWebClientService stockWebClientService;
-
-    @Autowired
-    private ProductWebClientService productWebClientService;
-
-    @Autowired
-    private SaleOrderWebClientService saleOrderWebClientService;
-
-    @Autowired
-    private CustomerWebClientService customerWebClientService;
 
     @Autowired
     private StockProducerService stockProducerService;

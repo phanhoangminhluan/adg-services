@@ -76,7 +76,7 @@ public class MisaWebClientService {
                         .put("client_secret", clientSecret)
                         .build()), Map.class)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<>() {});
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {});
 
         Map<String, Object> response = result.block();
 
@@ -90,7 +90,7 @@ public class MisaWebClientService {
                 .uri(uriFunction)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<>() {});
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {});
         return result.block();
     }
 
@@ -101,7 +101,7 @@ public class MisaWebClientService {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(body), Map.class)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<>() {});
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {});
         return result.block();
     }
 
@@ -112,7 +112,7 @@ public class MisaWebClientService {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(body), Map.class)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<>() {});
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {});
         return result.block();
     }
 

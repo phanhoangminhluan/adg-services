@@ -22,7 +22,7 @@ public class CustomerDTO {
     private String fax;
     private String website;
     private String parentAccountName;
-    private String accountNumner;
+    private String accountNumber;
     private String taxCode;
     private String budgetCode;
     private String bankAccount;
@@ -36,7 +36,7 @@ public class CustomerDTO {
     private String isPublic;
     private ZonedDateTime modifiedDate;
     private String modifiedBy;
-    private ZonedDateTime createdDate;
+    private ZonedDateTime createdDate; //
     private String createdBy;
     private String asyncId;
     private int organizationUnitId;

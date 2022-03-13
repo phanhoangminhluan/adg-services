@@ -82,4 +82,3 @@ public class OrderDTO {
     private List<SaleOrderProductMappingDTO> saleOrderProductMappingDTOs = null;
 
 }
-

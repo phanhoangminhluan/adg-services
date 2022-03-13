@@ -21,16 +21,34 @@ LOGBACK_PATH="$SERVER_PROJECT_PATH/src/main/resources/logback.xml"
 JAR_PATH="$SOURCE/adg-server-1.0-SNAPSHOT.jar"
 LIB_PATH="$SOURCE/lib/*"
 
+CORE_CLASSES="$PROJECT_PATH/adg-core/target/classes"
 ACTIVE_PROFILE=$1
 MODE=$2
+CLASSES=$3
 
 cd $PROJECT_PATH
 
 mvn clean install
 
-java -cp "$JAR_PATH:$LIB_PATH" \
-  -jar -Dspring.profiles.active="$ACTIVE_PROFILE-$MODE" \
+echo ""
+echo "RUNNING COMMAND: START ------------------------------------------------------------------------------------------------------------"
+
+echo java \
+       -Dspring.profiles.active="$ACTIVE_PROFILE-$MODE" \
+       -Dlogging.config="$LOGBACK_PATH" \
+       -DACTIVE_PROFILE="$ACTIVE_PROFILE" \
+       -DLOG_DIR="$LOG_DIR" \
+       -classpath "$JAR_PATH:$LIB_PATH:$CORE_CLASSES:$CLASSES" \
+       com.adg.server.AdgServerApplication "$ACTIVE_PROFILE"
+
+echo "RUNNING COMMAND: END ------------------------------------------------------------------------------------------------------------"
+echo ""
+
+java \
+  -Dspring.profiles.active="$ACTIVE_PROFILE-$MODE" \
   -Dlogging.config="$LOGBACK_PATH" \
   -DACTIVE_PROFILE="$ACTIVE_PROFILE" \
   -DLOG_DIR="$LOG_DIR" \
-  $JAR_PATH "$ACTIVE_PROFILE"
+  -classpath "$JAR_PATH:$LIB_PATH:$CORE_CLASSES:$CLASSES" \
+  com.adg.server.AdgServerApplication "$ACTIVE_PROFILE"
+
