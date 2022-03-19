@@ -1,7 +1,11 @@
 package com.adg.loader.consumers.product;
 
 import com.adg.core.common.constants.PubSubConstants;
+import com.adg.core.model.product.ProductDTO;
+import com.adg.core.service.product.ProductService;
 import com.adg.loader.consumers.AbstractConsumerService;
+import com.merlin.asset.core.utils.JsonUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +16,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductConsumerService extends AbstractConsumerService {
 
+    @Autowired
+    private ProductService productService;
+
     @KafkaListener(
             topics = PubSubConstants.Product.TOPIC_NAME,
             containerFactory = PubSubConstants.Product.LISTENER_CONTAINER_FACTORY
     )
     @Override
     public void consume(String message) {
-        super.consume(message);
+        ProductDTO dto = JsonUtils.fromJson(message, ProductDTO.class);
+        productService.save(dto);
     }
-
 }

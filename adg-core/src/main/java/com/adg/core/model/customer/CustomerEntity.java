@@ -1,13 +1,17 @@
-package com.adg.core.entity;
+package com.adg.core.model.customer;
 
+import com.adg.core.model.BaseEntity;
+import com.merlin.mapper.annotations.MappingField;
+import com.merlin.mapper.annotations.SourceFieldConfig;
+import com.merlin.mapper.annotations.TargetFieldConfig;
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 
 /**
  * @author Minh-Luan H. Phan
@@ -15,97 +19,120 @@ import java.time.ZonedDateTime;
  */
 @Data
 @Entity
-@Table(name = "Customers")
-public class CustomerEntity implements Serializable {
+@Table(name = "customer", schema = "public")
+public class CustomerEntity extends BaseEntity implements Serializable{
 
     @Id
+    @MappingField
     private String asyncId;
 
     @Column
+    @MappingField
     private int id;
 
     @Column
+    @MappingField
     private String accountName;
 
     @Column
+    @MappingField
     private String accountNumber;
 
     @Column
+    @MappingField
     private String accountShortName;
 
     @Column
+    @MappingField
     private String bankAccount;
 
     @Column
+    @MappingField
     private String bankName;
 
     @Column
+    @MappingField
+    @Type(type = "text")
     private String billingAddress;
 
     @Column
+    @MappingField
     private String billingCountry;
 
     @Column
+    @MappingField
     private String billingProvince;
 
     @Column
+    @MappingField
     private String budgetCode;
 
     @Column
-    private String createdBy;
-
-    @Column
-    private ZonedDateTime createdDate;
-
-    @Column
+    @MappingField
+    @Type(type = "text")
     private String description;
 
     @Column
+    @MappingField
     private String fax;
 
     @Column
+    @MappingField
     private int formLayoutId;
 
     @Column
-    private boolean isPublic;
+    @MappingField(
+            targetFieldConfigs = {
+                    @TargetFieldConfig(targetSetterMethod = "setPublic")
+            },
+            sourceFieldConfigs = {
+                    @SourceFieldConfig(sourceGetterMethod = "isPublic")
+            }
+    )
+    private boolean isPublic;;
 
     @Column
-    private String modifiedBy;
-
-    @Column
-    private ZonedDateTime modifiedDate;
-
-    @Column
+    @MappingField
     private String officeEmail;
 
     @Column
+    @MappingField
     private String officeTel;
 
     @Column
+    @MappingField
     private int organizationUnitId;
 
     @Column
+    @MappingField
     private String organizationUnitName;
 
     @Column
+    @MappingField
     private int ownerId;
 
     @Column
+    @MappingField
     private String ownerName;
 
     @Column
+    @MappingField
     private String parentAccountName;
 
     @Column
+    @MappingField
+    @Type(type = "text")
     private String shippingAddress;
 
     @Column
+    @MappingField
     private String shippingCountry;
 
     @Column
+    @MappingField
     private String taxCode;
 
     @Column
+    @MappingField
     private String website;
-
 }
