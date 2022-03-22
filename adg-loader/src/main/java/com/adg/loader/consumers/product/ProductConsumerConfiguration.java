@@ -26,7 +26,6 @@ public class ProductConsumerConfiguration extends AbstractConsumerConfiguration 
         return super.consumerFactory();
     }
 
-    @Override
     @Bean(value = PubSubConstants.Product.LISTENER_CONTAINER_FACTORY)
     protected ConcurrentKafkaListenerContainerFactory<String, String> concurrentKafkaListenerContainerFactory() {
         return super.concurrentKafkaListenerContainerFactory();

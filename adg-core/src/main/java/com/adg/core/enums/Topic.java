@@ -1,4 +1,4 @@
-package com.adg.core.common.enums;
+package com.adg.core.enums;
 
 
 import com.adg.core.common.constants.PubSubConstants;
