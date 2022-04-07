@@ -29,6 +29,5 @@ public class CustomerServiceImpl implements CustomerService {
     public void save(CustomerDTO dto) {
         CustomerEntity entity = mapper.toEntity(dto);
         CustomerEntity savedEntity = repository.save(entity);
-//        logger.info("Saved Entity: " + savedEntity);
     }
 }

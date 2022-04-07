@@ -2,8 +2,10 @@ package com.adg.core.configuration;
 
 import com.adg.core.mapper.*;
 import com.adg.core.model.customer.CustomerEntity;
+import com.adg.core.model.employee.EmployeeEntity;
 import com.adg.core.model.order.OrderEntity;
 import com.adg.core.model.order_product.OrderProductEntity;
+import com.adg.core.model.organization_unit.OrganizationUnitEntity;
 import com.adg.core.model.product.ProductEntity;
 import com.adg.core.model.stock.StockEntity;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +41,16 @@ public class MapperConfiguration {
     @Bean
     public OrderProductMapper orderProductMapper() {
         return new OrderProductMapper(OrderProductEntity.class);
+    }
+
+    @Bean
+    public EmployeeMapper employeeMapper() {
+        return new EmployeeMapper(EmployeeEntity.class);
+    }
+
+    @Bean
+    public OrganizationUnitMapper organizationUnitMapper() {
+        return new OrganizationUnitMapper(OrganizationUnitEntity.class);
     }
 
 }

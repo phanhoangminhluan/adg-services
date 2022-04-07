@@ -36,5 +36,19 @@ public class PubSubConstants {
         public static final String LISTENER_CONTAINER_FACTORY = "customerConcurrentKafkaListenerContainerFactory";
     }
 
+    public static class Employee extends PubSubInfo {
+        public static final String TOPIC_NAME = "employee";
+        public static final String GROUP_ID = "employee_sync_to_postgresql";
+        public static final String CONSUMER_FACTORY = "employeeConsumerFactory";
+        public static final String LISTENER_CONTAINER_FACTORY = "employeeConcurrentKafkaListenerContainerFactory";
+    }
+
+    public static class OrganizationUnit extends PubSubInfo {
+        public static final String TOPIC_NAME = "organization-unit";
+        public static final String GROUP_ID = "orgUnit_sync_to_postgresql";
+        public static final String CONSUMER_FACTORY = "orgUnitConsumerFactory";
+        public static final String LISTENER_CONTAINER_FACTORY = "orgUnitConcurrentKafkaListenerContainerFactory";
+    }
+
 }
 

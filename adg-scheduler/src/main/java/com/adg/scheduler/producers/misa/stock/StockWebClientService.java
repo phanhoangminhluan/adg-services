@@ -15,7 +15,7 @@ import java.util.Map;
 public class StockWebClientService extends AbstractWebClientService {
 
     @Override
-    protected List<Map<String, Object>> fetchItems(int page) {
+    public List<Map<String, Object>> fetchItems(int page) {
         Map<String, Object> responseMap = this.misaWebClientService.get((uriBuilder -> uriBuilder.path(this.getUriPath()).build()));
         return MapUtils.getListMapStringObject(responseMap, "data");
     }

@@ -30,11 +30,11 @@ public abstract class AbstractConsumerService {
     private SlackService slackService;
 
     public void consume(ConsumerRecord<String, String> consumerRecord, Acknowledgment acknowledgment) {
-        logger.info("Message consumed. " + LogUtils.buildLogMsg(
-                "Topic", consumerRecord.topic(),
-                "Key", consumerRecord.key(),
-                "Value", consumerRecord.value()
-        ));
+//        logger.info("Message consumed. " + LogUtils.buildLogMsg(
+//                "Topic", consumerRecord.topic(),
+//                "Key", consumerRecord.key(),
+//                "Value", consumerRecord.value()
+//        ));
     }
 
     protected void dlt(Message<String> in,

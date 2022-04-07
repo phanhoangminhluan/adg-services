@@ -20,7 +20,7 @@ public abstract class AbstractWebClientService {
     @Autowired
     protected MisaWebClientService misaWebClientService;
 
-    protected List<Map<String, Object>> fetchItems(int page) {
+    public List<Map<String, Object>> fetchItems(int page) {
         long t1 = System.currentTimeMillis();
         Map<String, Object> responseMap = this.misaWebClientService.get((uriBuilder -> uriBuilder
                 .path(this.getUriPath())
