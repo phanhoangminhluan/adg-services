@@ -13,11 +13,6 @@ import java.util.Map;
  */
 public class ExcelHandler {
 
-    public static void readToKhaiHaiQuan() {
-
-
-
-    }
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -25,7 +20,7 @@ public class ExcelHandler {
 
         Map<String, Object> addressMap = JsonUtils.fromJson(val, JsonUtils.TYPE_TOKEN.MAP_STRING_OBJECT.type);
 
-        ExcelReader excelReader = new ExcelReader("/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/ToKhaiHQ7N_104654188660.xls");
+        ExcelReader excelReader = new ExcelReader("/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/ToKhaiHQ7N_104654111000.xls");
         excelReader.openSheet("Tờ khai nhập");
         Map<String, Object> result = excelReader.getCellValues(addressMap);
         System.out.println(JsonUtils.toJson(result));
