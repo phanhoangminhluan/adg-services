@@ -9,6 +9,7 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,38 +41,33 @@ public class ExcelWriter {
     }
 
     public void copyCellValue(Cell sourceCell, Cell targetCell) {
-        sourceCell.setCellValue(ExcelRowUtils.parseString(targetCell));
+        targetCell.setCellValue(ExcelRowUtils.parseString(sourceCell));
     }
 
-    public Row copyRow(String startCellAddress, String endCellAddress) {
+    public Row copyRow(String startCellAddress,  int columnSize) {
         Cell startCell = this.getCell(startCellAddress);
-        Cell endCell = this.getCell(endCellAddress);
 
-        List<Cell> originalCells = this.getCellsByRange(startCellAddress, endCellAddress);
+        List<Cell> sourceCells = this.getCellsByRange(startCellAddress, columnSize);
 
+        this.sheet.shiftRows(startCell.getRow().getRowNum() + 1, startCell.getRow().getRowNum() + 2, 1, true, true);
         Row targetRow = this.sheet.createRow(startCell.getRow().getRowNum() + 1);
 
-        int i = 0;
-        for (Cell cell : targetRow) {
-
-            if (cell.getColumnIndex() < startCell.getColumnIndex()) continue;
-            if (cell.getColumnIndex() > endCell.getColumnIndex()) break;
-
-            Cell originalCell = originalCells.get(i);
-
-            copyCellValue(originalCell, cell);
-
-            cell.setCellStyle(originalCell.getCellStyle());
-
-            i++;
+        for (Cell sourceCell : sourceCells) {
+            Cell targetCell = targetRow.createCell(sourceCell.getColumnIndex());
+            copyCellValue(sourceCell, targetCell);
+            targetCell.setCellStyle(sourceCell.getCellStyle());
         }
 
         return targetRow;
     }
 
-    public List<Cell> getCellsByRange(String startCellAddress, String endCellAddress) {
+    public List<Cell> getCellsByRange(String startCellAddress, int columnSize) {
         Cell startCell = this.getCell(startCellAddress);
-        Cell endCell = this.getCell(endCellAddress);
+        int endCellIndex = startCell.getColumnIndex() + columnSize - 1;
+
+        Cell endCell = startCell.getRow().getCell(endCellIndex) != null
+                ? startCell.getRow().getCell(endCellIndex)
+                : startCell.getRow().createCell(endCellIndex);
 
         List<Cell> cells = new ArrayList<>();
 
@@ -90,6 +86,16 @@ public class ExcelWriter {
         return this.sheet
                 .getRow(cellReference.getRow())
                 .getCell(cellReference.getCol());
+    }
+
+    @SneakyThrows
+    public static void main(String[] args) {
+        ExcelWriter excelWriter = new ExcelWriter("/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/2. Kê Điện Tử.xlsx");
+        excelWriter.openSheet("1");
+        Row row = excelWriter.copyRow("A10", 6);
+
+        excelWriter.workbook.write(new FileOutputStream("/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/2. Kê Điện Tử - output.xlsx"));
+        row.setRowNum(36);
     }
 
 }
