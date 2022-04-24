@@ -19,7 +19,7 @@ import java.util.List;
  * @author Minh-Luan H. Phan
  * Created on: 2022.04.19 21:29
  */
-public class ExcelRowUtils {
+public class ExcelUtils {
 
     public static List<String> parseRow(@Nonnull Row row, int maxCellNum) {
         List<String> rowValue = new ArrayList<>();
@@ -173,4 +173,35 @@ public class ExcelRowUtils {
             }
         }
     }
+
+    public static void setCell(Cell cell, Object value, CellType cellType) {
+        switch (cellType) {
+            case STRING: {
+                String val = value.toString();
+                cell.setCellValue(val);
+                return;
+            }
+            case NUMERIC: {
+                double val = ParserUtils.toDouble(value);
+                cell.setCellValue(val);
+                return;
+            }
+            case BOOLEAN: {
+                boolean val = ParserUtils.toBoolean(value);
+                cell.setCellValue(val);
+                return;
+            }
+            case FORMULA: {
+                String val = value.toString();
+                cell.setCellFormula(val);
+                return;
+            }
+            case _NONE:
+            case BLANK:
+            case ERROR: {
+                cell.setCellValue("");
+            }
+        }
+    }
+
 }

@@ -43,7 +43,7 @@ public class ExcelReader {
 
     public String getCellValue(String cellAddress) {
         Cell cell = this.getCell(cellAddress);
-        return ExcelRowUtils.parseString(cell);
+        return ExcelUtils.parseString(cell);
     }
     public List<String> getCellValues(List<String> cellAddresses) {
         return cellAddresses

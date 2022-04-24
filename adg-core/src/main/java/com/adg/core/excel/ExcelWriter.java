@@ -41,25 +41,40 @@ public class ExcelWriter {
     }
 
     public void copyCellValue(Cell sourceCell, Cell targetCell) {
-        targetCell.setCellValue(ExcelRowUtils.parseString(sourceCell));
+        targetCell.setCellValue(ExcelUtils.parseString(sourceCell));
     }
 
-    public Row copyRow(String startCellAddress,  int columnSize) {
-        Cell startCell = this.getCell(startCellAddress);
+    public Row insertBelow(Row row) {
+        this.sheet.shiftRows(row.getRowNum() + 1, this.sheet.getLastRowNum(), 1);
+        return this.sheet.createRow(row.getRowNum() + 1);
+    }
 
-        List<Cell> sourceCells = this.getCellsByRange(startCellAddress, columnSize);
-
-        this.sheet.shiftRows(startCell.getRow().getRowNum() + 1, startCell.getRow().getRowNum() + 2, 1, true, true);
-        Row targetRow = this.sheet.createRow(startCell.getRow().getRowNum() + 1);
-
-        for (Cell sourceCell : sourceCells) {
-            Cell targetCell = targetRow.createCell(sourceCell.getColumnIndex());
-            copyCellValue(sourceCell, targetCell);
+    public Row cloneRowSetting(Row sourceRow, Row targetRow, int startColumnIndex, int endColumnIndex) {
+        for (int i = startColumnIndex; i <= endColumnIndex; i++) {
+            Cell targetCell = this.getCell(targetRow, i);
+            Cell sourceCell = this.getCell(sourceRow, i);
             targetCell.setCellStyle(sourceCell.getCellStyle());
         }
-
         return targetRow;
     }
+
+    public Cell getCell(Row row, int columnIndex) {
+        Cell cell = row.getCell(columnIndex);
+        if (cell != null) {
+            return cell;
+        }
+        return row.createCell(columnIndex);
+    }
+
+    public Row getRow(int rowIndex) {
+        Row row = this.sheet.getRow(rowIndex);
+        if (row != null) {
+            return row;
+        }
+
+        return this.sheet.createRow(rowIndex);
+    }
+
 
     public List<Cell> getCellsByRange(String startCellAddress, int columnSize) {
         Cell startCell = this.getCell(startCellAddress);
@@ -81,21 +96,39 @@ public class ExcelWriter {
         return cells;
     }
 
+    @SneakyThrows
+    public void build(String path) {
+        this.workbook.write(new FileOutputStream(path));
+
+    }
+
+
     public Cell getCell(String cellAddress) {
         CellReference cellReference = new CellReference(cellAddress);
-        return this.sheet
-                .getRow(cellReference.getRow())
-                .getCell(cellReference.getCol());
+        Row row = this.getRow(cellReference.getRow());
+        return this.getCell(row, cellReference.getCol());
+    }
+
+    public void removeRow(Row row, int startIndexColumn, int endIndexColumn) {
+        this.sheet.shiftRows(row.getRowNum() + 1, this.sheet.getLastRowNum(), -1);
     }
 
     @SneakyThrows
     public static void main(String[] args) {
         ExcelWriter excelWriter = new ExcelWriter("/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/2. Kê Điện Tử.xlsx");
         excelWriter.openSheet("1");
-        Row row = excelWriter.copyRow("A10", 6);
+        Row row = excelWriter.getCell("A10").getRow();
 
-        excelWriter.workbook.write(new FileOutputStream("/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/2. Kê Điện Tử - output.xlsx"));
-        row.setRowNum(36);
+//        Row row = excelWriter.insertBelow("A10", 1, 6);
+//        row.getCell(2).setCellValue("1111");
+//        Row row2 = excelWriter.insertBelow("A10", 2, 6);
+//        row2.getCell(2).setCellValue("2222");
+//        Row row3 = excelWriter.insertBelow("A10", 3, 6);
+//        row3.getCell(2).setCellValue("3333");
+
     }
 
+    public Sheet getSheet() {
+        return sheet;
+    }
 }
