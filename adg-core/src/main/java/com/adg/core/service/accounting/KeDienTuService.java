@@ -30,7 +30,7 @@ public class KeDienTuService {
 
     public KeDienTuService() {
         this.excelWriter = new ExcelWriter(filePath);
-        this.excelWriter.openSheet("");
+        this.excelWriter.openSheet();
         this.excelTable = new ExcelTable(this.excelWriter, AdgExcelTableMetadata.getBangKeChungTuDeNghiGiaiNgan());
     }
 

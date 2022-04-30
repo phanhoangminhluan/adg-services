@@ -1,10 +1,7 @@
 package com.adg.core.excel;
 
 import lombok.SneakyThrows;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -31,7 +28,7 @@ public class ExcelWriter {
         this.workbook = new XSSFWorkbook(fileInputStream);
     }
 
-    public void openSheet(String sheetName) {
+    public void openSheet() {
         this.sheet = this.workbook.getSheetAt(0);
     }
 
@@ -113,10 +110,21 @@ public class ExcelWriter {
         this.sheet.shiftRows(row.getRowNum() + 1, this.sheet.getLastRowNum(), -1);
     }
 
+    public void setShiftCellValue(String originalAddress, int aboveTableSize, Object value, CellType cellType) {
+
+        Cell originalCell = this.getCell(originalAddress);
+        Cell shiftedCell = this.getCell(
+                this.getRow(aboveTableSize + originalCell.getRowIndex() - 1),
+                originalCell.getColumnIndex()
+        );
+
+        ExcelUtils.setCell(shiftedCell, value, cellType);
+    }
+
     @SneakyThrows
     public static void main(String[] args) {
         ExcelWriter excelWriter = new ExcelWriter("/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/2. Kê Điện Tử.xlsx");
-        excelWriter.openSheet("1");
+        excelWriter.openSheet();
         Row row = excelWriter.getCell("A10").getRow();
 
 //        Row row = excelWriter.insertBelow("A10", 1, 6);
