@@ -1,12 +1,13 @@
-package com.adg.core.excel.model.accounting;
+package com.adg.core.service.FileGenerator.bill.viettin.BangKeChungTuDienTuDeNghiGiaiNgan;
 
+import com.adg.core.service.FileGenerator.AdgExcelTable;
 import org.apache.poi.ss.usermodel.CellType;
 
 /**
  * @author Minh-Luan H. Phan
  * Created on: 2022.04.24 11:22
  */
-public enum BangKeChungTuDienTuDeNghiGiaiNgan implements AdgExcelTable {
+public enum BangKeChungTuDienTuDeNghiGiaiNganTableMetadata implements AdgExcelTable {
 
     TT("TT", "A9", CellType.NUMERIC),
     SoChungTu("Số chứng từ", "B9", CellType.NUMERIC),
@@ -19,7 +20,7 @@ public enum BangKeChungTuDienTuDeNghiGiaiNgan implements AdgExcelTable {
     private final String cellAddress;
     private final CellType cellType;
 
-    BangKeChungTuDienTuDeNghiGiaiNgan(String header, String cellAddress, CellType cellType) {
+    BangKeChungTuDienTuDeNghiGiaiNganTableMetadata(String header, String cellAddress, CellType cellType) {
         this.header = header;
         this.cellAddress = cellAddress;
         this.cellType = cellType;

@@ -1,8 +1,8 @@
-package com.adg.core.service.FileGenerator.BangKeSuDungTienVay;
+package com.adg.core.service.FileGenerator.bill.bidv.BangKeSuDungTienVay;
 
+import com.adg.core.excel.ExcelTable;
 import com.adg.core.excel.ExcelUtils;
 import com.adg.core.excel.ExcelWriter;
-import com.adg.core.excel.model.ExcelTable;
 import com.adg.core.service.FileGenerator.AdgExcelTableMetadata;
 import com.merlin.asset.core.utils.DateTimeUtils;
 import com.merlin.asset.core.utils.MapUtils;

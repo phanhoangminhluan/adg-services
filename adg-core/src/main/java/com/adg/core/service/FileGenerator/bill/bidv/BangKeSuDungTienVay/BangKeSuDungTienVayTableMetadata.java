@@ -1,6 +1,6 @@
-package com.adg.core.service.FileGenerator.BangKeSuDungTienVay;
+package com.adg.core.service.FileGenerator.bill.bidv.BangKeSuDungTienVay;
 
-import com.adg.core.excel.model.accounting.AdgExcelTable;
+import com.adg.core.service.FileGenerator.AdgExcelTable;
 import org.apache.poi.ss.usermodel.CellType;
 
 /**

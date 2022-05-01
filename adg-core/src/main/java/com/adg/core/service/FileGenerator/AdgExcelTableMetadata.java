@@ -1,8 +1,7 @@
 package com.adg.core.service.FileGenerator;
 
-import com.adg.core.excel.model.accounting.AdgExcelTable;
-import com.adg.core.excel.model.accounting.BangKeChungTuDienTuDeNghiGiaiNgan;
-import com.adg.core.service.FileGenerator.BangKeSuDungTienVay.BangKeSuDungTienVayTableMetadata;
+import com.adg.core.service.FileGenerator.bill.bidv.BangKeSuDungTienVay.BangKeSuDungTienVayTableMetadata;
+import com.adg.core.service.FileGenerator.bill.viettin.BangKeChungTuDienTuDeNghiGiaiNgan.BangKeChungTuDienTuDeNghiGiaiNganTableMetadata;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,7 +21,7 @@ public class AdgExcelTableMetadata {
     private int columnSize;
 
     public static AdgExcelTableMetadata getBangKeChungTuDeNghiGiaiNgan() {
-        List<AdgExcelTable> headers = Arrays.asList(BangKeChungTuDienTuDeNghiGiaiNgan.values());
+        List<AdgExcelTable> headers = Arrays.asList(BangKeChungTuDienTuDeNghiGiaiNganTableMetadata.values());
 
         return AdgExcelTableMetadata.builder()
                 .headers(headers)

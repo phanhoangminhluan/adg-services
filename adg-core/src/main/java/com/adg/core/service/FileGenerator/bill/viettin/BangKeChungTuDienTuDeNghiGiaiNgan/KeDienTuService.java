@@ -1,9 +1,8 @@
-package com.adg.core.service.accounting;
+package com.adg.core.service.FileGenerator.bill.viettin.BangKeChungTuDienTuDeNghiGiaiNgan;
 
+import com.adg.core.excel.ExcelTable;
 import com.adg.core.excel.ExcelUtils;
 import com.adg.core.excel.ExcelWriter;
-import com.adg.core.excel.model.ExcelTable;
-import com.adg.core.excel.model.accounting.BangKeChungTuDienTuDeNghiGiaiNgan;
 import com.adg.core.service.FileGenerator.AdgExcelTableMetadata;
 import com.merlin.asset.core.utils.DateTimeUtils;
 import com.merlin.asset.core.utils.MapUtils;
@@ -51,7 +50,7 @@ public class KeDienTuService {
     }
 
     public void fillSum() {
-        Cell soTienHeaderCell = this.excelWriter.getCell(BangKeChungTuDienTuDeNghiGiaiNgan.SoTien.getCellAddress());
+        Cell soTienHeaderCell = this.excelWriter.getCell(BangKeChungTuDienTuDeNghiGiaiNganTableMetadata.SoTien.getCellAddress());
         String startCell = this.excelWriter.getCell(
                 this.excelWriter.getRow(soTienHeaderCell.getRowIndex() + 1),
                 soTienHeaderCell.getColumnIndex()

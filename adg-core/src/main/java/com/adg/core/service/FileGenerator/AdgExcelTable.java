@@ -1,4 +1,4 @@
-package com.adg.core.excel.model.accounting;
+package com.adg.core.service.FileGenerator;
 
 import org.apache.poi.ss.usermodel.CellType;
 
