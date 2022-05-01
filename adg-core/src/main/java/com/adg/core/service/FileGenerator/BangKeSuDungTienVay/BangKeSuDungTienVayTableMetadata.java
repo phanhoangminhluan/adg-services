@@ -1,4 +1,4 @@
-package com.adg.core.excel.model.accounting.bill.bidv;
+package com.adg.core.service.FileGenerator.BangKeSuDungTienVay;
 
 import com.adg.core.excel.model.accounting.AdgExcelTable;
 import org.apache.poi.ss.usermodel.CellType;
@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.CellType;
  * @author Minh-Luan H. Phan
  * Created on: 2022.04.30 13:43
  */
-public enum BangKeSuDungTienVay implements AdgExcelTable {
+public enum BangKeSuDungTienVayTableMetadata implements AdgExcelTable {
     TT("TT", "A9", CellType.NUMERIC),
     NoiDung("Nội dung", "B9", CellType.STRING),
     SoHieuChungTuKeToan("Số hiệu chứng từ kế toán", "C9", CellType.STRING),
@@ -19,7 +19,7 @@ public enum BangKeSuDungTienVay implements AdgExcelTable {
     private final String cellAddress;
     private final CellType cellType;
 
-    BangKeSuDungTienVay(String header, String cellAddress, CellType cellType) {
+    BangKeSuDungTienVayTableMetadata(String header, String cellAddress, CellType cellType) {
         this.header = header;
         this.cellAddress = cellAddress;
         this.cellType = cellType;

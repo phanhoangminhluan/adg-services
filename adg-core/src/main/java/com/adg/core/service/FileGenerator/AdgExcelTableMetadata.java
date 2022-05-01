@@ -1,6 +1,8 @@
-package com.adg.core.excel.model.accounting;
+package com.adg.core.service.FileGenerator;
 
-import com.adg.core.excel.model.accounting.bill.bidv.BangKeSuDungTienVay;
+import com.adg.core.excel.model.accounting.AdgExcelTable;
+import com.adg.core.excel.model.accounting.BangKeChungTuDienTuDeNghiGiaiNgan;
+import com.adg.core.service.FileGenerator.BangKeSuDungTienVay.BangKeSuDungTienVayTableMetadata;
 import lombok.Builder;
 import lombok.Data;
 
@@ -30,7 +32,7 @@ public class AdgExcelTableMetadata {
     }
 
     public static AdgExcelTableMetadata getBangKeSuDungTienVay() {
-        List<AdgExcelTable> headers = Arrays.asList(BangKeSuDungTienVay.values());
+        List<AdgExcelTable> headers = Arrays.asList(BangKeSuDungTienVayTableMetadata.values());
 
         return AdgExcelTableMetadata.builder()
                 .headers(headers)

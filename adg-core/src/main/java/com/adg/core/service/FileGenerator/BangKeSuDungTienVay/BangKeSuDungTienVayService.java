@@ -1,10 +1,9 @@
-package com.adg.core.service.bill.bidv;
+package com.adg.core.service.FileGenerator.BangKeSuDungTienVay;
 
 import com.adg.core.excel.ExcelUtils;
 import com.adg.core.excel.ExcelWriter;
 import com.adg.core.excel.model.ExcelTable;
-import com.adg.core.excel.model.accounting.AdgExcelTableMetadata;
-import com.adg.core.excel.model.accounting.bill.bidv.BangKeSuDungTienVay;
+import com.adg.core.service.FileGenerator.AdgExcelTableMetadata;
 import com.merlin.asset.core.utils.DateTimeUtils;
 import com.merlin.asset.core.utils.MapUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -43,7 +42,7 @@ public class BangKeSuDungTienVayService {
     }
 
     public void fillSum() {
-        Cell soTienHeaderCell = this.excelWriter.getCell(BangKeSuDungTienVay.SoTien.getCellAddress());
+        Cell soTienHeaderCell = this.excelWriter.getCell(BangKeSuDungTienVayTableMetadata.SoTien.getCellAddress());
         String startCell = this.excelWriter.getCell(
                 this.excelWriter.getRow(soTienHeaderCell.getRowIndex() + 1),
                 soTienHeaderCell.getColumnIndex()

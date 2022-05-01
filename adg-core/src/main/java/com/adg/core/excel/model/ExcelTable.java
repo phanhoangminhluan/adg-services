@@ -3,7 +3,7 @@ package com.adg.core.excel.model;
 import com.adg.core.excel.ExcelUtils;
 import com.adg.core.excel.ExcelWriter;
 import com.adg.core.excel.model.accounting.AdgExcelTable;
-import com.adg.core.excel.model.accounting.AdgExcelTableMetadata;
+import com.adg.core.service.FileGenerator.AdgExcelTableMetadata;
 import lombok.Getter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
