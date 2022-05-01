@@ -1,4 +1,4 @@
-package com.adg.core.excel;
+package com.adg.core.OfficeHandler.excel;
 
 import com.adg.core.service.FileGenerator.AdgExcelTable;
 import com.adg.core.service.FileGenerator.AdgExcelTableMetadata;
