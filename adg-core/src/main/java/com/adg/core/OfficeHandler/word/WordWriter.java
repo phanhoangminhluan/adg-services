@@ -43,7 +43,6 @@ public class WordWriter {
                 for (XWPFTableRow tableRow : table.getRows()) {
                     for (XWPFTableCell tableCell : tableRow.getTableCells()) {
                         paragraphs.addAll(tableCell.getParagraphs());
-                        System.out.println("----------- " + tableCell.getText());
                     }
                 }
             }
@@ -52,8 +51,6 @@ public class WordWriter {
         for (XWPFParagraph paragraph : paragraphs) {
             for (XWPFRun run : paragraph.getRuns()) {
                 String val = run.getText(0);
-                System.out.println(val);
-                System.out.println("-------------");
                 if (val != null && val.contains("{{") && val.contains("}}")) {
                     String key = val.substring(val.indexOf("{{") + 2, val.indexOf("}}"));
                     String newText = val.replace("{{" + key + "}}", MapUtils.getString(data, key));
