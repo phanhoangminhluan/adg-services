@@ -20,9 +20,9 @@ import java.util.Map;
  */
 public class HopDongTinDungService {
 
-    private WordWriter wordWriter;
-    private String outputFolder;
-    private Map<String, Object> data;
+    private final WordWriter wordWriter;
+    private final String outputFolder;
+    private final Map<String, Object> data;
 
     private final static String template = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/HỢP ĐÒNG TÍN DỤNG.docx";
 
