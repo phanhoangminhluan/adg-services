@@ -4,14 +4,12 @@ import com.adg.core.service.FileGenerator.AdgWordTableHeaderInfo;
 import com.merlin.asset.core.utils.MapUtils;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.apache.poi.xwpf.usermodel.IBodyElement;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,16 +33,31 @@ public class WordWriter {
     }
 
     public void fillTextData(Map<String, Object> data) {
+        List<XWPFParagraph> paragraphs = new ArrayList<>();
         for (IBodyElement bodyElement : this.document.getBodyElements()) {
             if (bodyElement instanceof XWPFParagraph) {
                 XWPFParagraph paragraph = (XWPFParagraph) bodyElement;
-                for (XWPFRun run : paragraph.getRuns()) {
-                    String val = run.getText(0);
-                    if (val != null && val.contains("{{") && val.contains("}}")) {
-                        String key = val.substring(val.indexOf("{{") + 2, val.indexOf("}}"));
-                        String newText = val.replace("{{" + key + "}}", MapUtils.getString(data, key));
-                        run.setText(newText, 0);
+                paragraphs.add(paragraph);
+            } else if (bodyElement instanceof XWPFTable){
+                XWPFTable table = (XWPFTable) bodyElement;
+                for (XWPFTableRow tableRow : table.getRows()) {
+                    for (XWPFTableCell tableCell : tableRow.getTableCells()) {
+                        paragraphs.addAll(tableCell.getParagraphs());
+                        System.out.println("----------- " + tableCell.getText());
                     }
+                }
+            }
+        }
+
+        for (XWPFParagraph paragraph : paragraphs) {
+            for (XWPFRun run : paragraph.getRuns()) {
+                String val = run.getText(0);
+                System.out.println(val);
+                System.out.println("-------------");
+                if (val != null && val.contains("{{") && val.contains("}}")) {
+                    String key = val.substring(val.indexOf("{{") + 2, val.indexOf("}}"));
+                    String newText = val.replace("{{" + key + "}}", MapUtils.getString(data, key));
+                    run.setText(newText, 0);
                 }
             }
         }
