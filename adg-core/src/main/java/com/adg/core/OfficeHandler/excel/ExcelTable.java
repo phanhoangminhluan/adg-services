@@ -52,7 +52,9 @@ public class ExcelTable {
            AdgExcelTableHeaderInfo header = this.headerNameIndexMap.get(i);
            Cell cell = currentRow.getCell(i);
            Object value = item.get(header.getHeaderName());
-           ExcelUtils.setCell(cell, value, header.getCellType());
+           if (value != null) {
+               ExcelUtils.setCell(cell, value, header.getCellType());
+           }
 
        }
        return currentRow;

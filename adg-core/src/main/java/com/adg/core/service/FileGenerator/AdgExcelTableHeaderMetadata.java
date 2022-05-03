@@ -1,6 +1,7 @@
 package com.adg.core.service.FileGenerator;
 
 import com.adg.core.service.FileGenerator.bill.bidv.BangKeSuDungTienVay.BangKeSuDungTienVayHeaderInfoMetadata;
+import com.adg.core.service.FileGenerator.bill.bidv.DonMuaHang.DonMuaHangHeaderInfoMetadata;
 import com.adg.core.service.FileGenerator.bill.viettin.BangKeChungTuDienTuDeNghiGiaiNgan.BangKeChungTuDienTuDeNghiGiaiNganTableMetadataHeaderInfo;
 import lombok.Builder;
 import lombok.Data;
@@ -36,6 +37,15 @@ public class AdgExcelTableHeaderMetadata {
         return AdgExcelTableHeaderMetadata.builder()
                 .headers(headers)
                 .startCellAddress("A10")
+                .columnSize(headers.size())
+                .build();
+    }
+
+    public static AdgExcelTableHeaderMetadata getDonMuaHang() {
+        List<AdgExcelTableHeaderInfo> headers = Arrays.asList(DonMuaHangHeaderInfoMetadata.values());
+        return AdgExcelTableHeaderMetadata.builder()
+                .headers(headers)
+                .startCellAddress("A15")
                 .columnSize(headers.size())
                 .build();
     }
