@@ -3,7 +3,7 @@ package com.adg.core.service.FileGenerator.bill.bidv.BangKeSuDungTienVay;
 import com.adg.core.OfficeHandler.excel.ExcelTable;
 import com.adg.core.OfficeHandler.excel.ExcelUtils;
 import com.adg.core.OfficeHandler.excel.ExcelWriter;
-import com.adg.core.service.FileGenerator.AdgExcelTableMetadata;
+import com.adg.core.service.FileGenerator.AdgExcelTableHeaderMetadata;
 import com.merlin.asset.core.utils.DateTimeUtils;
 import com.merlin.asset.core.utils.MapUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -29,7 +29,7 @@ public class BangKeSuDungTienVayService {
     public BangKeSuDungTienVayService() {
         this.excelWriter = new ExcelWriter(INPUT_FILE);
         this.excelWriter.openSheet();
-        this.excelTable = new ExcelTable(this.excelWriter, AdgExcelTableMetadata.getBangKeSuDungTienVay());
+        this.excelTable = new ExcelTable(this.excelWriter, AdgExcelTableHeaderMetadata.getBangKeSuDungTienVay());
     }
 
     public void insertRecordToTable(List<Map<String, Object>> items) {
@@ -42,7 +42,7 @@ public class BangKeSuDungTienVayService {
     }
 
     public void fillSum() {
-        Cell soTienHeaderCell = this.excelWriter.getCell(BangKeSuDungTienVayTableMetadata.SoTien.getCellAddress());
+        Cell soTienHeaderCell = this.excelWriter.getCell(BangKeSuDungTienVayHeaderInfoMetadata.SoTien.getCellAddress());
         String startCell = this.excelWriter.getCell(
                 this.excelWriter.getRow(soTienHeaderCell.getRowIndex() + 1),
                 soTienHeaderCell.getColumnIndex()

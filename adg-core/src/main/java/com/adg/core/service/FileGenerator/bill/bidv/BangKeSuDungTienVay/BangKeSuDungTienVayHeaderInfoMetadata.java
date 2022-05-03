@@ -1,13 +1,13 @@
 package com.adg.core.service.FileGenerator.bill.bidv.BangKeSuDungTienVay;
 
-import com.adg.core.service.FileGenerator.AdgExcelTable;
+import com.adg.core.service.FileGenerator.AdgExcelTableHeaderInfo;
 import org.apache.poi.ss.usermodel.CellType;
 
 /**
  * @author Minh-Luan H. Phan
  * Created on: 2022.04.30 13:43
  */
-public enum BangKeSuDungTienVayTableMetadata implements AdgExcelTable {
+public enum BangKeSuDungTienVayHeaderInfoMetadata implements AdgExcelTableHeaderInfo {
     TT("TT", "A9", CellType.NUMERIC),
     NoiDung("Nội dung", "B9", CellType.STRING),
     SoHieuChungTuKeToan("Số hiệu chứng từ kế toán", "C9", CellType.STRING),
@@ -19,7 +19,7 @@ public enum BangKeSuDungTienVayTableMetadata implements AdgExcelTable {
     private final String cellAddress;
     private final CellType cellType;
 
-    BangKeSuDungTienVayTableMetadata(String header, String cellAddress, CellType cellType) {
+    BangKeSuDungTienVayHeaderInfoMetadata(String header, String cellAddress, CellType cellType) {
         this.header = header;
         this.cellAddress = cellAddress;
         this.cellType = cellType;

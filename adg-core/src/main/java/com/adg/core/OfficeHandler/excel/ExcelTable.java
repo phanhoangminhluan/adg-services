@@ -1,7 +1,7 @@
 package com.adg.core.OfficeHandler.excel;
 
-import com.adg.core.service.FileGenerator.AdgExcelTable;
-import com.adg.core.service.FileGenerator.AdgExcelTableMetadata;
+import com.adg.core.service.FileGenerator.AdgExcelTableHeaderInfo;
+import com.adg.core.service.FileGenerator.AdgExcelTableHeaderMetadata;
 import lombok.Getter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,17 +16,17 @@ import java.util.Map;
 @Getter
 public class ExcelTable {
 
-    private final AdgExcelTableMetadata metadata;
+    private final AdgExcelTableHeaderMetadata metadata;
     private final Cell startCell;
     private final Row sampleRow;
     private final ExcelWriter excelWriter;
     private int size;
     private final int startColumnIndex;
     private final int endColumnIndex;
-    private final Map<Integer, AdgExcelTable> headerNameIndexMap;
+    private final Map<Integer, AdgExcelTableHeaderInfo> headerNameIndexMap;
 
 
-    public ExcelTable(ExcelWriter excelWriter, AdgExcelTableMetadata metadata) {
+    public ExcelTable(ExcelWriter excelWriter, AdgExcelTableHeaderMetadata metadata) {
         this.metadata = metadata;
         this.excelWriter = excelWriter;
         this.startCell = this.excelWriter.getCell(metadata.getStartCellAddress());
@@ -35,7 +35,7 @@ public class ExcelTable {
         this.endColumnIndex = this.startColumnIndex + this.metadata.getColumnSize() - 1;
 
         this.headerNameIndexMap = new HashMap<>();
-        for (AdgExcelTable header : this.metadata.getHeaders()) {
+        for (AdgExcelTableHeaderInfo header : this.metadata.getHeaders()) {
             Cell cell = this.excelWriter.getCell(header.getCellAddress());
             this.headerNameIndexMap.put(cell.getColumnIndex(), header);
         }
@@ -49,7 +49,7 @@ public class ExcelTable {
         currentRow = this.excelWriter.cloneRowSetting(lastRow, currentRow , this.startColumnIndex, this.endColumnIndex);
 
        for (int i = this.startColumnIndex; i <= this.endColumnIndex; i++) {
-           AdgExcelTable header = this.headerNameIndexMap.get(i);
+           AdgExcelTableHeaderInfo header = this.headerNameIndexMap.get(i);
            Cell cell = currentRow.getCell(i);
            Object value = item.get(header.getHeaderName());
            ExcelUtils.setCell(cell, value, header.getCellType());
