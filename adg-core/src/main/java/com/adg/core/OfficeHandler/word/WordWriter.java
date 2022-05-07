@@ -51,8 +51,10 @@ public class WordWriter {
         for (XWPFParagraph paragraph : paragraphs) {
             for (XWPFRun run : paragraph.getRuns()) {
                 String val = run.getText(0);
+                System.out.println(val);
                 if (val != null && val.contains("{{") && val.contains("}}")) {
                     String key = val.substring(val.indexOf("{{") + 2, val.indexOf("}}"));
+                    System.out.println(key);
                     String newText = val.replace("{{" + key + "}}", MapUtils.getString(data, key));
                     run.setText(newText, 0);
                 }

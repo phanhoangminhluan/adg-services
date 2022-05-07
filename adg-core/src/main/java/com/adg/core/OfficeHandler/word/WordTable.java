@@ -26,8 +26,8 @@ public class WordTable {
             if (bodyElement instanceof XWPFTable) {
                 XWPFTable xwpfTable = (XWPFTable) bodyElement;
                 String rawHeaders = xwpfTable.getText();
-                boolean isAnyMatch = headerMap.values().stream().allMatch(adgWordTableHeaderInfo -> rawHeaders.contains(adgWordTableHeaderInfo.getHeaderName()));
-                if (isAnyMatch) {
+                boolean isAllMatch = headerMap.values().stream().allMatch(adgWordTableHeaderInfo -> rawHeaders.contains(adgWordTableHeaderInfo.getHeaderName()));
+                if (isAllMatch) {
                     this.table = xwpfTable;
                     break;
                 }

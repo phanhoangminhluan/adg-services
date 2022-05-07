@@ -1,5 +1,6 @@
 package com.adg.core.service.FileGenerator;
 
+import com.adg.core.service.FileGenerator.bill.bidv.DonCamKet.DonCamKetTableHeaderInfoMetadata;
 import com.adg.core.service.FileGenerator.bill.bidv.HopDongTinDung.HopDongTinDungTableHeaderInfoMetadata;
 
 import java.util.HashMap;
@@ -14,6 +15,15 @@ public class AdgWordTableHeaderMetadata {
     public static Map<Integer, AdgWordTableHeaderInfo> getHeaderMapHopDongTinDung() {
         Map<Integer, AdgWordTableHeaderInfo> headerMap = new HashMap<>();
         for (HopDongTinDungTableHeaderInfoMetadata value : HopDongTinDungTableHeaderInfoMetadata.values()) {
+            headerMap.put(value.getOrdinal(), value);
+        }
+        return headerMap;
+    }
+
+    public static Map<Integer, AdgWordTableHeaderInfo> getHeaderMapDonCamKet() {
+        Map<Integer, AdgWordTableHeaderInfo> headerMap = new HashMap<>();
+
+        for (DonCamKetTableHeaderInfoMetadata value : DonCamKetTableHeaderInfoMetadata.values()) {
             headerMap.put(value.getOrdinal(), value);
         }
         return headerMap;
