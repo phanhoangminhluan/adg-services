@@ -1,4 +1,4 @@
-package com.adg.core.service.InternationalPayment.bidv.UyNhiemChi;
+package com.adg.core.service.InternationalPayment.bidv.writer.UyNhiemChi;
 
 import com.adg.core.OfficeHandler.word.WordWriter;
 import com.merlin.asset.core.utils.DateTimeUtils;

@@ -1,4 +1,4 @@
-package com.adg.core.service.InternationalPayment.bidv.BienBanKiemTraSuDungVonVay;
+package com.adg.core.service.InternationalPayment.bidv.writer.DonCamKet;
 
 import com.adg.core.OfficeHandler.word.WordUtils;
 import com.adg.core.service.FileGenerator.AdgWordTableHeaderInfo;
@@ -11,64 +11,65 @@ import java.util.function.Consumer;
 
 /**
  * @author Minh-Luan H. Phan
- * Created on: 2022.05.09 22:26
+ * Created on: 2022.05.03 20:16
  */
-public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTableHeaderInfo {
-    TT(
-        "TT",
-        0,
-        cell -> {
-            cell.setWidthType(TableWidthType.PCT);
-            cell.setWidth("7.5%");
-            cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
-            WordUtils.Table.makeCenter(cell);
-        },
-        runs -> runs.forEach(run -> run.setFontSize(11))
+public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
+    STT(
+            "STT",
+            0,
+            cell -> {
+                cell.setWidthType(TableWidthType.PCT);
+                cell.setWidth("8.1%");
+                cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                WordUtils.Table.makeCenter(cell);
+            },
+            runs -> runs.forEach(run -> run.setFontSize(11))
     ),
-    NoiDung(
-            "Nội dung",
+    SoHoaDon(
+            "Số hoá đơn",
             1,
             cell -> {
                 cell.setWidthType(TableWidthType.PCT);
-                cell.setWidth("19.7%");
+                cell.setWidth("14.1%");
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
             runs -> runs.forEach(run -> run.setFontSize(11))
     ),
-    SoHieuChungTuKeToan(
-            "Số hiệu chứng từ kế toán",
+    NgayHoaDon(
+            "Ngày hoá đơn",
             2,
             cell -> {
                 cell.setWidthType(TableWidthType.PCT);
-                cell.setWidth("20%");
+                cell.setWidth("15.1%");
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
             runs -> runs.forEach(run -> run.setFontSize(11))
     ),
-    SoTienVND(
-            "Số tiền (VND)",
+    SoTienTrenHoaDon(
+            "Số tiền trên hoá đơn",
             3,
             cell -> {
                 cell.setWidthType(TableWidthType.PCT);
-                cell.setWidth("20%");
+                cell.setWidth("22%");
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
             runs -> runs.forEach(run -> run.setFontSize(11))
     ),
-    TenDonVi(
-            "Tên đơn vị, số tài khoản, Ngân hàng người thụ hưởng",
+    ToChucXuatHoaDon(
+            "Tên, mã số thuế của đơn vị, tổ chức xuất hoá đơn",
             4,
             cell -> {
                 cell.setWidthType(TableWidthType.PCT);
-                cell.setWidth("32.7%");
+                cell.setWidth("40.5%");
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
             runs -> runs.forEach(run -> run.setFontSize(11))
-    )
+    ),
+
     ;
 
     private final String headerName;
@@ -77,7 +78,7 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
     private final Consumer<List<XWPFRun>> runConsumer;
 
 
-    BienBanKiemTraSuDungVonVayHeaderInfoMetadata(String headerName, int ordinal, Consumer<XWPFTableCell> cellFormatConsumer, Consumer<List<XWPFRun>> runConsumer) {
+    DonCamKetTableHeaderInfoMetadata(String headerName, int ordinal, Consumer<XWPFTableCell> cellFormatConsumer, Consumer<List<XWPFRun>> runConsumer) {
         this.headerName = headerName;
         this.ordinal = ordinal;
         this.cellFormatConsumer = cellFormatConsumer;

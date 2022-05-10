@@ -1,4 +1,4 @@
-package com.adg.core.service.InternationalPayment.bidv.BangKeSuDungTienVay;
+package com.adg.core.service.InternationalPayment.bidv.writer.BangKeSuDungTienVay;
 
 import com.adg.core.OfficeHandler.excel.ExcelTable;
 import com.adg.core.OfficeHandler.excel.ExcelUtils;

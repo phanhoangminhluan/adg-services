@@ -1,4 +1,4 @@
-package com.adg.core.service.InternationalPayment.bidv.DonMuaHang;
+package com.adg.core.service.InternationalPayment.bidv.writer.DonMuaHang;
 
 import com.adg.core.OfficeHandler.excel.ExcelTable;
 import com.adg.core.OfficeHandler.excel.ExcelUtils;

@@ -1,4 +1,4 @@
-package com.adg.core.service.InternationalPayment.bidv.DonCamKet;
+package com.adg.core.service.InternationalPayment.bidv.writer.DonCamKet;
 
 import com.adg.core.OfficeHandler.word.WordWriter;
 import com.adg.core.service.FileGenerator.AdgWordTableHeaderMetadata;

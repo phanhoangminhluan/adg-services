@@ -1,4 +1,4 @@
-package com.adg.core.service.InternationalPayment.bidv.HopDongTinDung;
+package com.adg.core.service.InternationalPayment.bidv.writer.HopDongTinDung;
 
 import com.adg.core.OfficeHandler.word.WordUtils;
 import com.adg.core.service.FileGenerator.AdgWordTableHeaderInfo;

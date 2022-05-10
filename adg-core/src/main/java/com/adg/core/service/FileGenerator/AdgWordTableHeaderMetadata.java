@@ -1,8 +1,8 @@
 package com.adg.core.service.FileGenerator;
 
-import com.adg.core.service.InternationalPayment.bidv.BienBanKiemTraSuDungVonVay.BienBanKiemTraSuDungVonVayHeaderInfoMetadata;
-import com.adg.core.service.InternationalPayment.bidv.DonCamKet.DonCamKetTableHeaderInfoMetadata;
-import com.adg.core.service.InternationalPayment.bidv.HopDongTinDung.HopDongTinDungTableHeaderInfoMetadata;
+import com.adg.core.service.InternationalPayment.bidv.writer.BienBanKiemTraSuDungVonVay.BienBanKiemTraSuDungVonVayHeaderInfoMetadata;
+import com.adg.core.service.InternationalPayment.bidv.writer.DonCamKet.DonCamKetTableHeaderInfoMetadata;
+import com.adg.core.service.InternationalPayment.bidv.writer.HopDongTinDung.HopDongTinDungTableHeaderInfoMetadata;
 
 import java.util.HashMap;
 import java.util.Map;

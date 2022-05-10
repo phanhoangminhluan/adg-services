@@ -1,7 +1,7 @@
 package com.adg.core.service.FileGenerator;
 
-import com.adg.core.service.InternationalPayment.bidv.BangKeSuDungTienVay.BangKeSuDungTienVayHeaderInfoMetadata;
-import com.adg.core.service.InternationalPayment.bidv.DonMuaHang.DonMuaHangHeaderInfoMetadata;
+import com.adg.core.service.InternationalPayment.bidv.writer.BangKeSuDungTienVay.BangKeSuDungTienVayHeaderInfoMetadata;
+import com.adg.core.service.InternationalPayment.bidv.writer.DonMuaHang.DonMuaHangHeaderInfoMetadata;
 import com.adg.core.service.InternationalPayment.viettinbank.BangKeChungTuDienTuDeNghiGiaiNgan.BangKeChungTuDienTuDeNghiGiaiNganTableMetadataHeaderInfo;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.adg.core.service.InternationalPayment.bidv.BienBanKiemTraSuDungVonVay;
+package com.adg.core.service.InternationalPayment.bidv.writer.BienBanKiemTraSuDungVonVay;
 
 import com.adg.core.OfficeHandler.word.WordUtils;
 import com.adg.core.OfficeHandler.word.WordWriter;
