@@ -28,6 +28,7 @@ public class WordUtils {
            return WordUtils.Table.setCell(cell, value, true);
         }
 
+
         public static XWPFRun setCell(XWPFTableCell cell, String value, boolean isClear) {
             List<XWPFParagraph> paragraphs = cell.getParagraphs();
             XWPFParagraph paragraph;
@@ -62,9 +63,14 @@ public class WordUtils {
                 ctTcPr = ctTc.addNewTcPr();
             }
             ctTcPr.addNewGridSpan().setVal(new BigInteger(String.valueOf(colSpan)));
-            for (int i = colPos + 1; i < colSpan; i++) {
+            if (colPos + 1 == colSpan) {
                 row.removeCell(colPos + 1);
+            } else {
+                for (int i = colPos + 1; i < colSpan; i++) {
+                    row.removeCell(colPos + 1);
+                }
             }
+
             for (int i = 0; i < row.getCtRow().sizeOfTcArray(); i++) {
                 WordUtils.Table.setCell(row.getCell(i), "");
             }

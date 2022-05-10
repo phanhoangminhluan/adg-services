@@ -1,5 +1,6 @@
 package com.adg.core.service.FileGenerator;
 
+import com.adg.core.service.FileGenerator.bill.bidv.BienBanKiemTraSuDungVonVay.BienBanKiemTraSuDungVonVayHeaderInfoMetadata;
 import com.adg.core.service.FileGenerator.bill.bidv.DonCamKet.DonCamKetTableHeaderInfoMetadata;
 import com.adg.core.service.FileGenerator.bill.bidv.HopDongTinDung.HopDongTinDungTableHeaderInfoMetadata;
 
@@ -28,4 +29,13 @@ public class AdgWordTableHeaderMetadata {
         }
         return headerMap;
     }
+
+    public static Map<Integer, AdgWordTableHeaderInfo> getHeaderBienBanKiemTraSuDungVonVay() {
+        Map<Integer, AdgWordTableHeaderInfo> headerMap = new HashMap<>();
+        for (BienBanKiemTraSuDungVonVayHeaderInfoMetadata value : BienBanKiemTraSuDungVonVayHeaderInfoMetadata.values()) {
+            headerMap.put(value.getOrdinal(), value);
+        }
+        return headerMap;
+    }
+
 }
