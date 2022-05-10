@@ -2,7 +2,7 @@ package com.adg.loader.consumers.employee;
 
 import com.adg.core.common.constants.PubSubConstants;
 import com.adg.core.model.employee.EmployeeDTO;
-import com.adg.core.service.employee.EmployeeService;
+import com.adg.core.service.MisaTool.employee.EmployeeService;
 import com.adg.loader.consumers.AbstractConsumerService;
 import com.merlin.asset.core.utils.JsonUtils;
 import com.merlin.asset.core.utils.LogUtils;

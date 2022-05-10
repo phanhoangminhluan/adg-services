@@ -2,7 +2,7 @@ package com.adg.loader.consumers.customer;
 
 import com.adg.core.common.constants.PubSubConstants;
 import com.adg.core.model.customer.CustomerDTO;
-import com.adg.core.service.customer.CustomerService;
+import com.adg.core.service.MisaTool.customer.CustomerService;
 import com.adg.loader.consumers.AbstractConsumerService;
 import com.merlin.asset.core.utils.JsonUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

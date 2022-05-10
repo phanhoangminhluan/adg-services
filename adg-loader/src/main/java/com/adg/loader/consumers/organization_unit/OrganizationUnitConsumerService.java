@@ -2,7 +2,7 @@ package com.adg.loader.consumers.organization_unit;
 
 import com.adg.core.common.constants.PubSubConstants;
 import com.adg.core.model.organization_unit.OrganizationUnitDTO;
-import com.adg.core.service.organization_unit.OrganizationUnitService;
+import com.adg.core.service.MisaTool.organization_unit.OrganizationUnitService;
 import com.adg.loader.consumers.AbstractConsumerService;
 import com.merlin.asset.core.utils.JsonUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

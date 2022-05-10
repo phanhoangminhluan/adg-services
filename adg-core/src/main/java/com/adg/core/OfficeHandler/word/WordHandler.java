@@ -1,7 +1,7 @@
 package com.adg.core.OfficeHandler.word;
 
 import com.adg.core.service.FileGenerator.AdgWordTableHeaderInfo;
-import com.adg.core.service.FileGenerator.bill.bidv.HopDongTinDung.HopDongTinDungTableHeaderInfoMetadata;
+import com.adg.core.service.InternationalPayment.bidv.HopDongTinDung.HopDongTinDungTableHeaderInfoMetadata;
 import com.merlin.asset.core.utils.DateTimeUtils;
 import com.merlin.asset.core.utils.MapUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;

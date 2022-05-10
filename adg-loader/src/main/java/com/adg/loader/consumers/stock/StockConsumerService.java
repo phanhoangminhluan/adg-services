@@ -2,7 +2,7 @@ package com.adg.loader.consumers.stock;
 
 import com.adg.core.common.constants.PubSubConstants;
 import com.adg.core.model.stock.StockDTO;
-import com.adg.core.service.stock.StockService;
+import com.adg.core.service.MisaTool.stock.StockService;
 import com.adg.loader.consumers.AbstractConsumerService;
 import com.merlin.asset.core.utils.JsonUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

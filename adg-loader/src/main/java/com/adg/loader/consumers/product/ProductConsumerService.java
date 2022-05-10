@@ -2,7 +2,7 @@ package com.adg.loader.consumers.product;
 
 import com.adg.core.common.constants.PubSubConstants;
 import com.adg.core.model.product.ProductDTO;
-import com.adg.core.service.product.ProductService;
+import com.adg.core.service.MisaTool.product.ProductService;
 import com.adg.core.service.slack.SlackService;
 import com.adg.loader.consumers.AbstractConsumerService;
 import com.merlin.asset.core.utils.JsonUtils;
