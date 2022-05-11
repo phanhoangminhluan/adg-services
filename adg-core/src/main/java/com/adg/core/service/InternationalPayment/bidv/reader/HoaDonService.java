@@ -5,6 +5,7 @@ import com.adg.core.service.InternationalPayment.bidv.enums.HoaDonHeaderMetadata
 import com.adg.core.service.InternationalPayment.bidv.writer.BangKeSuDungTienVay.BangKeSuDungTienVayService;
 import com.adg.core.service.InternationalPayment.bidv.writer.BienBanKiemTraSuDungVonVay.BienBanKiemTraSuDungVonVayService;
 import com.adg.core.service.InternationalPayment.bidv.writer.DonCamKet.DonCamKetService;
+import com.adg.core.service.InternationalPayment.bidv.writer.HopDongTinDung.HopDongTinDungService;
 import com.merlin.asset.core.utils.JsonUtils;
 import com.merlin.asset.core.utils.MapUtils;
 import com.merlin.asset.core.utils.ParserUtils;
@@ -49,6 +50,9 @@ public class HoaDonService {
 
         BienBanKiemTraSuDungVonVayService bienBanKiemTraSuDungVonVayService = new BienBanKiemTraSuDungVonVayService(outputFolder, mapByNhaCungCap);
         bienBanKiemTraSuDungVonVayService.exportDocument();
+
+        HopDongTinDungService hopDongTinDungService = new HopDongTinDungService(outputFolder, mapByNhaCungCap);
+        hopDongTinDungService.exportDocument();
 
         return mapByNhaCungCap;
 

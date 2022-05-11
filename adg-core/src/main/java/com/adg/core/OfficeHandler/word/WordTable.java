@@ -5,6 +5,7 @@ import com.merlin.asset.core.utils.MapUtils;
 import lombok.Getter;
 import org.apache.poi.xwpf.usermodel.*;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,12 @@ public class WordTable {
             AdgWordTableHeaderInfo headerInfo = headerMap.get(i);
             List<String> values = MapUtils.getListString(data, headerInfo.getHeaderName(), null);
             if (values == null) {
-                values = Collections.singletonList(MapUtils.getString(data, headerInfo.getHeaderName()));
+                String strVal = MapUtils.getString(data, headerInfo.getHeaderName());
+                if (strVal.contains("\n")) {
+                    values = Arrays.asList(strVal.split("\n"));
+                } else {
+                    values = Collections.singletonList(MapUtils.getString(data, headerInfo.getHeaderName()));
+                }
             }
 
             List<XWPFRun> runs = WordUtils.Table.setCell(cell, values);
