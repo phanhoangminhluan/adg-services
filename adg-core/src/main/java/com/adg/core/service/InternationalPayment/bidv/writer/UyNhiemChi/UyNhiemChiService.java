@@ -1,9 +1,10 @@
 package com.adg.core.service.InternationalPayment.bidv.writer.UyNhiemChi;
 
 import com.adg.core.OfficeHandler.word.WordWriter;
-import com.merlin.asset.core.utils.DateTimeUtils;
-import com.merlin.asset.core.utils.FileUtils;
-import com.merlin.asset.core.utils.JsonUtils;
+import com.adg.core.service.InternationalPayment.bidv.NhaCungCapDTO;
+import com.adg.core.service.InternationalPayment.bidv.enums.HoaDonHeaderMetadata;
+import com.adg.core.utils.MoneyUtils;
+import com.merlin.asset.core.utils.*;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -24,7 +25,20 @@ public class UyNhiemChiService {
     public UyNhiemChiService(String outputFolder, Map<String, Object> data) {
         this.wordWriter = new WordWriter(template, new HashMap<>());
         this.outputFolder = outputFolder;
-        this.data = data;
+        this.data = this.transformHoaDonRecords(data);
+    }
+
+    public Map<String, Object> transformHoaDonRecords(Map<String, Object> hoaDonRecords) {
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("Người cung cấp", MapUtils.getString(hoaDonRecords, HoaDonHeaderMetadata.NhaCungCap.deAccentedName));
+        result.put("Số tiền bằng số", NumberUtils.formatNumber1(MapUtils.getDouble(hoaDonRecords, HoaDonHeaderMetadata.TongTienThanhToanCacHoaDon.deAccentedName)));
+        result.put("Số tài khoản", NhaCungCapDTO.nhaCungCapMap.get(MapUtils.getString(hoaDonRecords, HoaDonHeaderMetadata.NhaCungCap.deAccentedName)).getSoTaiKhoan());
+        result.put("Ngân hàng", NhaCungCapDTO.nhaCungCapMap.get(MapUtils.getString(hoaDonRecords, HoaDonHeaderMetadata.NhaCungCap.deAccentedName)).getTenNganHang());
+        result.put("Số tiền bằng chữ", MoneyUtils.convertMoneyToText(MapUtils.getDouble(hoaDonRecords, HoaDonHeaderMetadata.TongTienThanhToanCacHoaDon.deAccentedName)));
+        result.put("Ngày", DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue("dd/MM/yyyy")));
+
+        return result;
     }
 
     public void exportDocument() {
@@ -33,7 +47,8 @@ public class UyNhiemChiService {
     }
 
     private void build() {
-        String fileName = String.format("Uỷ nhiệm chi - %s.docx",
+        String fileName = String.format("Uỷ nhiệm chi - %s - %s.docx",
+                MapUtils.getString(this.data, "Người cung cấp"),
                 DateTimeUtils.convertZonedDateTimeToFormat(
                         ZonedDateTime.now(),
                         "Asia/Ho_Chi_Minh",

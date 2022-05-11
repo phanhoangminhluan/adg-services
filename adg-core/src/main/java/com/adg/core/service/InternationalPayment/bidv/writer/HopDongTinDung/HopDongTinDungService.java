@@ -4,6 +4,7 @@ import com.adg.core.OfficeHandler.word.WordUtils;
 import com.adg.core.OfficeHandler.word.WordWriter;
 import com.adg.core.service.FileGenerator.AdgWordTableHeaderMetadata;
 import com.adg.core.service.InternationalPayment.bidv.enums.HoaDonHeaderMetadata;
+import com.adg.core.utils.MoneyUtils;
 import com.merlin.asset.core.utils.*;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
@@ -56,7 +57,8 @@ public class HopDongTinDungService {
         result.put("Tổng tiền vay", NumberUtils.formatNumber1(tongTienVay));
         result.put("Ngày ký hợp đồng tín dụng", DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue("dd-MM-yyyy")));
         result.put("Ngày ký", String.format("TPHCM, ngày %s tháng %s năm %s", ZonedDateTime.now().getDayOfMonth(), ZonedDateTime.now().getMonthValue(), ZonedDateTime.now().getYear()));
-        result.put("Tổng tiền vay bằng chữ", "Hello");
+        result.put("Tổng tiền vay bằng chữ", MoneyUtils.convertMoneyToText(tongTienVay));
+
         result.put("Nội dung thanh toán", arr);
 
         return result;

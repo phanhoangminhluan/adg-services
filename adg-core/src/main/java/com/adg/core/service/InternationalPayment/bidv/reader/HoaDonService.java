@@ -6,6 +6,7 @@ import com.adg.core.service.InternationalPayment.bidv.writer.BangKeSuDungTienVay
 import com.adg.core.service.InternationalPayment.bidv.writer.BienBanKiemTraSuDungVonVay.BienBanKiemTraSuDungVonVayService;
 import com.adg.core.service.InternationalPayment.bidv.writer.DonCamKet.DonCamKetService;
 import com.adg.core.service.InternationalPayment.bidv.writer.HopDongTinDung.HopDongTinDungService;
+import com.adg.core.service.InternationalPayment.bidv.writer.UyNhiemChi.UyNhiemChiService;
 import com.merlin.asset.core.utils.JsonUtils;
 import com.merlin.asset.core.utils.MapUtils;
 import com.merlin.asset.core.utils.ParserUtils;
@@ -53,6 +54,11 @@ public class HoaDonService {
 
         HopDongTinDungService hopDongTinDungService = new HopDongTinDungService(outputFolder, mapByNhaCungCap);
         hopDongTinDungService.exportDocument();
+
+        for (String ncc : mapByNhaCungCap.keySet()) {
+            UyNhiemChiService uyNhiemChiService = new UyNhiemChiService(outputFolder, MapUtils.getMapStringObject(mapByNhaCungCap, ncc));
+            uyNhiemChiService.exportDocument();
+        }
 
         return mapByNhaCungCap;
 
