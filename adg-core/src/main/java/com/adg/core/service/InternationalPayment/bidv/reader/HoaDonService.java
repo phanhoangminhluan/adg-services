@@ -2,19 +2,24 @@ package com.adg.core.service.InternationalPayment.bidv.reader;
 
 import com.adg.core.OfficeHandler.excel.ExcelReader;
 import com.adg.core.service.InternationalPayment.bidv.enums.HoaDonHeaderMetadata;
+import com.adg.core.service.InternationalPayment.bidv.enums.PhieuNhapKhoHeaderMetadata;
 import com.adg.core.service.InternationalPayment.bidv.writer.BangKeSuDungTienVay.BangKeSuDungTienVayService;
 import com.adg.core.service.InternationalPayment.bidv.writer.BienBanKiemTraSuDungVonVay.BienBanKiemTraSuDungVonVayService;
 import com.adg.core.service.InternationalPayment.bidv.writer.DonCamKet.DonCamKetService;
+import com.adg.core.service.InternationalPayment.bidv.writer.DonMuaHang.DonMuaHangService;
 import com.adg.core.service.InternationalPayment.bidv.writer.HopDongTinDung.HopDongTinDungService;
 import com.adg.core.service.InternationalPayment.bidv.writer.UyNhiemChi.UyNhiemChiService;
-import com.merlin.asset.core.utils.JsonUtils;
+import com.merlin.asset.core.utils.DateTimeUtils;
 import com.merlin.asset.core.utils.MapUtils;
 import com.merlin.asset.core.utils.ParserUtils;
 import com.merlin.asset.core.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Minh-Luan H. Phan
@@ -26,13 +31,73 @@ public class HoaDonService {
 
     public List<Map<String, Object>> readHoaDonTable(String fileHoaDonPath) {
         ExcelReader excelReader = new ExcelReader(fileHoaDonPath);
-        Map<String, Object> output = excelReader.readTable("A1");
-        this.validate(output);
+        Map<String, Object> output = excelReader.readTable("A2");
+        List<Map<String, Object>> records = MapUtils.getListMapStringObject(output, "records");
+        List<Map<String, Object>> actualRecords = records.stream().filter(record -> !ParserUtils.isNullOrEmpty(MapUtils.getString(record, HoaDonHeaderMetadata.SoChungTu.name, "").trim())).collect(Collectors.toList());
 
-        return MapUtils.getListMapStringObject(output, "records");
+        this.validate(MapUtils.ImmutableMap()
+                .put("headers", MapUtils.getListMapStringObject(output, "headers"))
+                .put("records", actualRecords)
+                .build());
+        return actualRecords;
     }
 
-    public Map<String, Object> transformHoaDonTable(List<Map<String, Object>> records) {
+    public Map<String, Object> readPhieuNhapKho(List<String> listFilePhieuNhapKho) {
+        Map<String, Object> phieuNhapKhoByNCC = new HashMap<>();
+        for (String filePhieuNhapKho : listFilePhieuNhapKho) {
+            ExcelReader excelReader = new ExcelReader(filePhieuNhapKho);
+            Map<String, Object> output = excelReader.readTable("A16");
+            List<Map<String, Object>> records = MapUtils.getListMapStringObject(output, "records");
+            String description = excelReader.getCellValueAsString("A10");
+            Map<String, Object> phieuNhapKhoDescription = this.parsePhieuNhapKhoDescription(description);
+
+            String ncc = MapUtils.getString(phieuNhapKhoDescription, PhieuNhapKhoHeaderMetadata.NhaCungCap.deAccentedName);
+            String soHoaDon = MapUtils.getString(phieuNhapKhoDescription, PhieuNhapKhoHeaderMetadata.SoHoaDon.deAccentedName);
+            Map<String, Object> donHangCuaNCC = MapUtils.getMapStringObject(phieuNhapKhoByNCC, ncc, new HashMap<>());
+            List<Map<String, Object>> actualRecords = new ArrayList<>();
+            for (Map<String, Object> record : records) {
+                if (ParserUtils.isNullOrEmpty(MapUtils.getString(record, PhieuNhapKhoHeaderMetadata.STT.name))) {
+                    continue;
+                }
+                if (MapUtils.getString(record, PhieuNhapKhoHeaderMetadata.STT.name).equals("- Tổng số tiền (Viết bằng chữ):")) {
+                    break;
+                }
+                record.put(PhieuNhapKhoHeaderMetadata.NhaCungCap.deAccentedName, ncc);
+                record.put(PhieuNhapKhoHeaderMetadata.SoHoaDon.deAccentedName, soHoaDon);
+                actualRecords.add(record);
+            }
+            donHangCuaNCC.put(soHoaDon, actualRecords);
+            phieuNhapKhoByNCC.put(ncc, donHangCuaNCC);
+        }
+
+
+        return phieuNhapKhoByNCC;
+    }
+
+    public Map<String, Object> parsePhieuNhapKhoDescription(String description) {
+        Map<String, Object> output = new HashMap<>();
+        List<String> arr = Arrays.asList(description.split("của"));
+        String ncc = arr.get(1).trim();
+        String firstPart = arr.get(0).replace("- Theo hóa đơn số", "").trim();
+        List<String> arr2 = Arrays.asList(firstPart.split(" ")).stream().filter(str -> (
+                !str.trim().equalsIgnoreCase("ngày") && !str.trim().equalsIgnoreCase("tháng") && !str.trim().equalsIgnoreCase("năm") && !str.trim().equalsIgnoreCase("")
+        )).collect(Collectors.toList());
+
+        String soHoaDon = arr2.get(0);
+        ZonedDateTime zdt = ZonedDateTime.of(
+                ParserUtils.toInt(arr2.get(3)),
+                ParserUtils.toInt(arr2.get(2)),
+                ParserUtils.toInt(arr2.get(1)),
+                0,0,0,0, ZoneId.of("Asia/Ho_Chi_Minh")
+        );
+
+        output.put(PhieuNhapKhoHeaderMetadata.SoHoaDon.deAccentedName, soHoaDon);
+        output.put(PhieuNhapKhoHeaderMetadata.NgayChungTu.deAccentedName, DateTimeUtils.convertZonedDateTimeToFormat(zdt, "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue(DateTimeUtils.FMT_03)));
+        output.put(PhieuNhapKhoHeaderMetadata.NhaCungCap.deAccentedName, ncc);
+        return output;
+    }
+
+    public void transformHoaDonTable(List<Map<String, Object>> records) {
 
         Map<String, Object> transformedHoaDon = this.mapByNhaCungCap(records);
         Map<String, Object> mapByNhaCungCap = MapUtils.getMapStringObject(transformedHoaDon, "Map by nhà cung cấp");
@@ -59,9 +124,18 @@ public class HoaDonService {
             UyNhiemChiService uyNhiemChiService = new UyNhiemChiService(outputFolder, MapUtils.getMapStringObject(mapByNhaCungCap, ncc));
             uyNhiemChiService.exportDocument();
         }
+    }
 
-        return mapByNhaCungCap;
+    public void transformPhieuNhapKho(Map<String, Object> phieuNhapKhoMap) {
+        String outputFolder = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/output";
 
+        for (String ncc : phieuNhapKhoMap.keySet()) {
+            Map<String, Object> donHangMap = MapUtils.getMapStringObject(phieuNhapKhoMap, ncc);
+            for (String soHoaDon : donHangMap.keySet()) {
+                DonMuaHangService donMuaHangService = new DonMuaHangService(outputFolder, MapUtils.getListMapStringObject(donHangMap, soHoaDon), soHoaDon);
+                donMuaHangService.exportDocument();
+            }
+        }
     }
 
     private Map<String, Object> mapByNhaCungCap(List<Map<String, Object>> records) {
@@ -115,8 +189,6 @@ public class HoaDonService {
 
         sortedBySttKhongGop.sort(Comparator.comparingInt(m -> MapUtils.getInt(m, HoaDonHeaderMetadata.SoThuTuKhongGop.deAccentedName)));
         sortedBySttCoGop.sort(Comparator.comparingInt(m -> MapUtils.getInt(m, HoaDonHeaderMetadata.SoThuTuCoGop.deAccentedName)));
-
-        System.out.println(JsonUtils.toJson(mapByNhaCungCap));
 
         return MapUtils.ImmutableMap()
                 .put("Số thứ tự có gộp", sortedBySttCoGop)

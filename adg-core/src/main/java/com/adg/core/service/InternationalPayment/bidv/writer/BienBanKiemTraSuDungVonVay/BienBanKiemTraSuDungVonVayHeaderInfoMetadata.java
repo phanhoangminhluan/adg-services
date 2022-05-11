@@ -86,6 +86,9 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
             record -> {
                 String nhaCungCap = MapUtils.getString(record, HoaDonHeaderMetadata.NhaCungCap.deAccentedName);
                 NhaCungCapDTO dto = NhaCungCapDTO.nhaCungCapMap.get(nhaCungCap);
+                if (dto == null) {
+                    return String.format("\nSỐ TK: \nTẠI NH: ");
+                }
                 return String.format("%s\nSỐ TK: %s\nTẠI NH: %s", dto.getTenKhachHang(), dto.getSoTaiKhoan(), dto.getTenNganHang());
             }
     )

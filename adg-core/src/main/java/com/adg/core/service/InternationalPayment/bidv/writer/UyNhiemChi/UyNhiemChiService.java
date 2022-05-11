@@ -31,10 +31,11 @@ public class UyNhiemChiService {
     public Map<String, Object> transformHoaDonRecords(Map<String, Object> hoaDonRecords) {
         Map<String, Object> result = new HashMap<>();
 
+        NhaCungCapDTO nhaCungCapDTO = NhaCungCapDTO.nhaCungCapMap.get(MapUtils.getString(hoaDonRecords, HoaDonHeaderMetadata.NhaCungCap.deAccentedName));
         result.put("Người cung cấp", MapUtils.getString(hoaDonRecords, HoaDonHeaderMetadata.NhaCungCap.deAccentedName));
         result.put("Số tiền bằng số", NumberUtils.formatNumber1(MapUtils.getDouble(hoaDonRecords, HoaDonHeaderMetadata.TongTienThanhToanCacHoaDon.deAccentedName)));
-        result.put("Số tài khoản", NhaCungCapDTO.nhaCungCapMap.get(MapUtils.getString(hoaDonRecords, HoaDonHeaderMetadata.NhaCungCap.deAccentedName)).getSoTaiKhoan());
-        result.put("Ngân hàng", NhaCungCapDTO.nhaCungCapMap.get(MapUtils.getString(hoaDonRecords, HoaDonHeaderMetadata.NhaCungCap.deAccentedName)).getTenNganHang());
+        result.put("Số tài khoản", nhaCungCapDTO == null ?  "" : nhaCungCapDTO.getSoTaiKhoan());
+        result.put("Ngân hàng", nhaCungCapDTO == null ?  "" : nhaCungCapDTO.getTenNganHang());
         result.put("Số tiền bằng chữ", MoneyUtils.convertMoneyToText(MapUtils.getDouble(hoaDonRecords, HoaDonHeaderMetadata.TongTienThanhToanCacHoaDon.deAccentedName)));
         result.put("Ngày", DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue("dd/MM/yyyy")));
 

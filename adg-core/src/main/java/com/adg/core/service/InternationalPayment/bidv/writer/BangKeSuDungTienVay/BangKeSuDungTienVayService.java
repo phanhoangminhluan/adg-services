@@ -67,7 +67,7 @@ public class BangKeSuDungTienVayService {
     }
 
     private void build() {
-        String fileName = String.format("BẢNG KÊ SỬ DỤNG TIỀN VAY - %s.xlsx", DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.MA_DATE_TIME_FORMATTER));
+        String fileName = String.format("Bảng kê sử dụng tiền vay - %s.xlsx", DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.MA_DATE_TIME_FORMATTER));
         this.excelWriter.build(outputFolder + "/" + fileName);
     }
 

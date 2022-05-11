@@ -2,6 +2,7 @@ package com.adg.core.service.InternationalPayment.bidv;
 
 import com.adg.core.service.InternationalPayment.bidv.reader.HoaDonService;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -16,9 +17,14 @@ public class BidvPaymentService {
     public void exportDocuments(String fileHoaDon) {
         HoaDonService hoaDonService = new HoaDonService();
 
-        List<Map<String, Object>> records = hoaDonService.readHoaDonTable(fileHoaDon);
+        List<Map<String, Object>> hoaDonRecords = hoaDonService.readHoaDonTable("/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/SampleData/HoaDon02.xlsx");
+        Map<String, Object> phieuNhapKhoMap = hoaDonService.readPhieuNhapKho(Arrays.asList(
+                "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/SampleData/PNK 006.xls",
+                "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/SampleData/PNK 008.xls"
+        ));
 
-        Map<String, Object> transformedRecords = hoaDonService.transformHoaDonTable(records);
+        hoaDonService.transformHoaDonTable(hoaDonRecords);
+        hoaDonService.transformPhieuNhapKho(phieuNhapKhoMap);
 
     }
 

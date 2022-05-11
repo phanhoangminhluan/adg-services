@@ -4,6 +4,8 @@ import com.adg.core.OfficeHandler.excel.ExcelTable;
 import com.adg.core.OfficeHandler.excel.ExcelUtils;
 import com.adg.core.OfficeHandler.excel.ExcelWriter;
 import com.adg.core.service.FileGenerator.AdgExcelTableHeaderMetadata;
+import com.adg.core.service.InternationalPayment.bidv.enums.PhieuNhapKhoHeaderMetadata;
+import com.adg.core.utils.MoneyUtils;
 import com.merlin.asset.core.utils.DateTimeUtils;
 import com.merlin.asset.core.utils.FileUtils;
 import com.merlin.asset.core.utils.JsonUtils;
@@ -12,6 +14,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +29,7 @@ public class DonMuaHangService {
     private ExcelTable excelTable;
     private Map<String, Object> data;
     private String outputFolder;
+    private String soHoaDon;
 
     private static class DonMuaHangAddress {
         public static final String TEN_NCC = "B8";
@@ -40,7 +45,7 @@ public class DonMuaHangService {
 
     private final static String template = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/ĐƠN MUA HÀNG.xlsx";
 
-    public DonMuaHangService(String outputFolder, Map<String, Object> data) {
+    public DonMuaHangService(String outputFolder, List<Map<String, Object>> phieuNhapKhoRecords, String soHoaDon) {
         this.outputFolder = outputFolder;
         this.excelWriter = new ExcelWriter(template);
         this.excelWriter.openSheet();
@@ -48,10 +53,11 @@ public class DonMuaHangService {
                 this.excelWriter,
                 AdgExcelTableHeaderMetadata.getDonMuaHang()
         );
-        this.data = data;
+        this.data = this.transformHoaDonRecords(phieuNhapKhoRecords);
+        this.soHoaDon = soHoaDon;
     }
 
-    public void export() {
+    public void exportDocument() {
         this.fillUpperData();
         this.insertRecordToTable();
         this.fillTongTien();
@@ -60,8 +66,50 @@ public class DonMuaHangService {
     }
 
     private void build() {
-        String fileName = String.format("Đơn mua hàng - %s.xlsx", DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.MA_DATE_TIME_FORMATTER));
+        String fileName = String.format("Đơn mua hàng - %s - %s - %s.xlsx",
+                MapUtils.getString(data, "Tên NCC"),
+                this.soHoaDon,
+                DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.MA_DATE_TIME_FORMATTER)
+        );
         this.excelWriter.build(this.outputFolder + "/" + fileName);
+    }
+
+    private Map<String, Object> transformHoaDonRecords(List<Map<String, Object>> phieuNhapKhoRecords) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> table = new ArrayList<>();
+        String tenNcc = "";
+        double thanhTien = 0;
+        for (Map<String, Object> phieuNhapKhoRecord : phieuNhapKhoRecords) {
+            Map<String, Object> transformedRecord = new HashMap<>();
+            for (DonMuaHangHeaderInfoMetadata headerInfoMetadata : DonMuaHangHeaderInfoMetadata.values()) {
+                transformedRecord.put(headerInfoMetadata.getHeaderName(), headerInfoMetadata.transformCallback.apply(phieuNhapKhoRecord));
+                switch (headerInfoMetadata) {
+                    case ThanhTien: {
+                        thanhTien += MapUtils.getDouble(phieuNhapKhoRecord, PhieuNhapKhoHeaderMetadata.ThanhTien.deAccentedName);
+                    }
+                }
+            }
+
+            tenNcc = MapUtils.getString(phieuNhapKhoRecord, PhieuNhapKhoHeaderMetadata.NhaCungCap.deAccentedName);
+            table.add(transformedRecord);
+        }
+        result.put("Tên NCC", tenNcc);
+        result.put("Ngày", DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue("dd-MM-yyyy")));
+        result.put("Địa chỉ", "");
+        result.put("Số", String.format("ĐMH%s",DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue("ddMMyy"))));
+        result.put("Mã số thuế", "");
+        result.put("Loại tiền", "VND");
+        result.put("Điện thoại", "");
+        result.put("Fax", "");
+        result.put("Diễn giải", "");
+        result.put("Danh sách mã hàng", table);
+        result.put("Số tiền viết bằng chữ", MoneyUtils.convertMoneyToText(thanhTien));
+        result.put("Ngày giao hàng", String.format("Kể từ ngày %s", DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue("dd/MM/yyyy"))));
+        result.put("Địa điểm giao hàng", "Tại kho Công ty Cổ Phần Á Đông ADG");
+        result.put("Điều khoản thanh toán", "");
+        result.put("Ghi chú", "");
+
+        return result;
     }
 
 
@@ -245,12 +293,12 @@ public class DonMuaHangService {
         String rawData = FileUtils.readContent("/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/SampleData/ĐƠN MUA HÀNG.json");
         Map<String, Object> data = JsonUtils.fromJson(rawData, JsonUtils.TYPE_TOKEN.MAP_STRING_OBJECT.type);
 
-        DonMuaHangService donMuaHangService = new DonMuaHangService(
-                "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/output",
-                data
-        );
-
-        donMuaHangService.export();
+//        DonMuaHangService donMuaHangService = new DonMuaHangService(
+//                "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/output",
+//                data
+//        );
+//
+//        donMuaHangService.export();
 
     }
 
