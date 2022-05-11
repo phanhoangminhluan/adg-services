@@ -3,7 +3,9 @@ package com.adg.core.service.InternationalPayment.bidv.reader;
 import com.adg.core.OfficeHandler.excel.ExcelReader;
 import com.adg.core.service.InternationalPayment.bidv.enums.HoaDonHeaderMetadata;
 import com.adg.core.service.InternationalPayment.bidv.writer.BangKeSuDungTienVay.BangKeSuDungTienVayService;
+import com.adg.core.service.InternationalPayment.bidv.writer.BienBanKiemTraSuDungVonVay.BienBanKiemTraSuDungVonVayService;
 import com.adg.core.service.InternationalPayment.bidv.writer.DonCamKet.DonCamKetService;
+import com.merlin.asset.core.utils.JsonUtils;
 import com.merlin.asset.core.utils.MapUtils;
 import com.merlin.asset.core.utils.ParserUtils;
 import com.merlin.asset.core.utils.StringUtils;
@@ -45,6 +47,9 @@ public class HoaDonService {
         DonCamKetService donCamKetService = new DonCamKetService(outputFolder, sortedListBySttKhongGop);
         donCamKetService.exportDocument();
 
+        BienBanKiemTraSuDungVonVayService bienBanKiemTraSuDungVonVayService = new BienBanKiemTraSuDungVonVayService(outputFolder, mapByNhaCungCap);
+        bienBanKiemTraSuDungVonVayService.exportDocument();
+
         return mapByNhaCungCap;
 
     }
@@ -75,16 +80,24 @@ public class HoaDonService {
                             hoaDonCuThe.put(hoaDonHeaderMetadata.deAccentedName, sttKhongGop);
                             break;
                         }
-                        case SoThuTuCoGop: {
-                            hoaDonCuThe.put(hoaDonHeaderMetadata.deAccentedName, sttGop);
-                            break;
-                        }
                     }
                 }
             }
             sortedBySttKhongGop.add(hoaDonCuThe);
             sortedBySttCoGop.add(hoaDonCuThe);
+
+            List<String> listSoHoaDon = MapUtils.getListString(dsHoaDonNhaCungCap, HoaDonHeaderMetadata.ListSoHoaDon.deAccentedName, new ArrayList<>());
+            listSoHoaDon.add(soHoaDon);
+            double tongSoTienThanhToanCacHoaDon = MapUtils.getDouble(dsHoaDonNhaCungCap, HoaDonHeaderMetadata.TongTienThanhToanCacHoaDon.deAccentedName, 0);
+            tongSoTienThanhToanCacHoaDon += MapUtils.getDouble(hoaDonCuThe, HoaDonHeaderMetadata.TongTienThanhToan.deAccentedName);
+
+
             dsHoaDonNhaCungCap.put(soHoaDon, hoaDonCuThe);
+            dsHoaDonNhaCungCap.put(HoaDonHeaderMetadata.ListSoHoaDon.deAccentedName, listSoHoaDon);
+            dsHoaDonNhaCungCap.put(HoaDonHeaderMetadata.TongTienThanhToanCacHoaDon.deAccentedName, tongSoTienThanhToanCacHoaDon);
+            dsHoaDonNhaCungCap.put(HoaDonHeaderMetadata.SoThuTuCoGop.deAccentedName, sttGop);
+            dsHoaDonNhaCungCap.put(HoaDonHeaderMetadata.NhaCungCap.deAccentedName, nhaCungCap);
+
             mapByNhaCungCap.put(nhaCungCap, dsHoaDonNhaCungCap);
 
             sttKhongGop++;
@@ -93,7 +106,7 @@ public class HoaDonService {
         sortedBySttKhongGop.sort(Comparator.comparingInt(m -> MapUtils.getInt(m, HoaDonHeaderMetadata.SoThuTuKhongGop.deAccentedName)));
         sortedBySttCoGop.sort(Comparator.comparingInt(m -> MapUtils.getInt(m, HoaDonHeaderMetadata.SoThuTuCoGop.deAccentedName)));
 
-
+        System.out.println(JsonUtils.toJson(mapByNhaCungCap));
 
         return MapUtils.ImmutableMap()
                 .put("Số thứ tự có gộp", sortedBySttCoGop)

@@ -2,12 +2,19 @@ package com.adg.core.service.InternationalPayment.bidv.writer.BienBanKiemTraSuDu
 
 import com.adg.core.OfficeHandler.word.WordUtils;
 import com.adg.core.service.FileGenerator.AdgWordTableHeaderInfo;
+import com.adg.core.service.InternationalPayment.bidv.NhaCungCapDTO;
+import com.adg.core.service.InternationalPayment.bidv.enums.HoaDonHeaderMetadata;
+import com.merlin.asset.core.utils.MapUtils;
+import com.merlin.asset.core.utils.NumberUtils;
+import com.merlin.asset.core.utils.ParserUtils;
 import org.apache.poi.xwpf.usermodel.TableWidthType;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author Minh-Luan H. Phan
@@ -23,7 +30,8 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
             cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
             WordUtils.Table.makeCenter(cell);
         },
-        runs -> runs.forEach(run -> run.setFontSize(11))
+        runs -> runs.forEach(run -> run.setFontSize(11)),
+        record -> MapUtils.getString(record, HoaDonHeaderMetadata.SoThuTuCoGop.deAccentedName)
     ),
     NoiDung(
             "Nội dung",
@@ -34,7 +42,12 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11))
+            runs -> runs.forEach(run -> run.setFontSize(11)),
+            record -> {
+                List<String> listSoHoaDon = MapUtils.getListString(record, HoaDonHeaderMetadata.ListSoHoaDon.deAccentedName);
+                return String.format("Thanh toán tiền hàng theo hoá đơn %s hết.", String.join(", ", listSoHoaDon));
+            }
+
     ),
     SoHieuChungTuKeToan(
             "Số hiệu chứng từ kế toán",
@@ -45,7 +58,8 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11))
+            runs -> runs.forEach(run -> run.setFontSize(11)),
+            record -> "UNC"
     ),
     SoTienVND(
             "Số tiền (VND)",
@@ -56,7 +70,8 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11))
+            runs -> runs.forEach(run -> run.setFontSize(11)),
+            record -> NumberUtils.formatNumber1(ParserUtils.toDouble(MapUtils.getString(record, HoaDonHeaderMetadata.TongTienThanhToanCacHoaDon.deAccentedName)))
     ),
     TenDonVi(
             "Tên đơn vị, số tài khoản, Ngân hàng người thụ hưởng",
@@ -67,7 +82,12 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11))
+            runs -> runs.forEach(run -> run.setFontSize(11)),
+            record -> {
+                String nhaCungCap = MapUtils.getString(record, HoaDonHeaderMetadata.NhaCungCap.deAccentedName);
+                NhaCungCapDTO dto = NhaCungCapDTO.nhaCungCapMap.get(nhaCungCap);
+                return String.format("%s\nSỐ TK: %s\nTẠI NH: %s", dto.getTenKhachHang(), dto.getSoTaiKhoan(), dto.getTenNganHang());
+            }
     )
     ;
 
@@ -75,13 +95,15 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
     private final int ordinal;
     private final Consumer<XWPFTableCell> cellFormatConsumer;
     private final Consumer<List<XWPFRun>> runConsumer;
+    public final Function<Map<String, Object>, String> transformCallback;
 
 
-    BienBanKiemTraSuDungVonVayHeaderInfoMetadata(String headerName, int ordinal, Consumer<XWPFTableCell> cellFormatConsumer, Consumer<List<XWPFRun>> runConsumer) {
+    BienBanKiemTraSuDungVonVayHeaderInfoMetadata(String headerName, int ordinal, Consumer<XWPFTableCell> cellFormatConsumer, Consumer<List<XWPFRun>> runConsumer, Function<Map<String, Object>, String> transformCallback) {
         this.headerName = headerName;
         this.ordinal = ordinal;
         this.cellFormatConsumer = cellFormatConsumer;
         this.runConsumer = runConsumer;
+        this.transformCallback = transformCallback;
     }
 
     @Override

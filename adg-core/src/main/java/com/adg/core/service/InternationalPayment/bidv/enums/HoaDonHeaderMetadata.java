@@ -28,6 +28,8 @@ public enum HoaDonHeaderMetadata {
     SoChungTuSoQT("Số chứng từ (Sổ QT)", true, true, AdgHeaderType.DOUBLE),
     SoThuTuKhongGop("Số thứ tự không gộp", true, false, AdgHeaderType.INTEGER),
     SoThuTuCoGop("Số thứ tự có gộp", true, false, AdgHeaderType.INTEGER),
+    ListSoHoaDon("List số hoá đơn", true, false, AdgHeaderType.INTEGER),
+    TongTienThanhToanCacHoaDon("Tổng tiền thanh toán các hoá đơn", true, false, AdgHeaderType.INTEGER),
     ;
     public final String name;
     public final String deAccentedName;
