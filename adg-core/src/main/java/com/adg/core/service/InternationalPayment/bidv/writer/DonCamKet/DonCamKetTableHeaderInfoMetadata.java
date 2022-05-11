@@ -2,12 +2,19 @@ package com.adg.core.service.InternationalPayment.bidv.writer.DonCamKet;
 
 import com.adg.core.OfficeHandler.word.WordUtils;
 import com.adg.core.service.FileGenerator.AdgWordTableHeaderInfo;
+import com.adg.core.service.InternationalPayment.bidv.NhaCungCapDTO;
+import com.adg.core.service.InternationalPayment.bidv.enums.HoaDonHeaderMetadata;
+import com.merlin.asset.core.utils.MapUtils;
+import com.merlin.asset.core.utils.NumberUtils;
+import com.merlin.asset.core.utils.ParserUtils;
 import org.apache.poi.xwpf.usermodel.TableWidthType;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author Minh-Luan H. Phan
@@ -23,7 +30,9 @@ public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11))
+            runs -> runs.forEach(run -> run.setFontSize(11)),
+            record -> MapUtils.getString(record, HoaDonHeaderMetadata.SoThuTuKhongGop.deAccentedName)
+
     ),
     SoHoaDon(
             "Số hoá đơn",
@@ -34,7 +43,9 @@ public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11))
+            runs -> runs.forEach(run -> run.setFontSize(11)),
+            record -> MapUtils.getString(record, HoaDonHeaderMetadata.SoHoaDon.deAccentedName)
+
     ),
     NgayHoaDon(
             "Ngày hoá đơn",
@@ -45,7 +56,8 @@ public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11))
+            runs -> runs.forEach(run -> run.setFontSize(11)),
+            record -> MapUtils.getString(record, HoaDonHeaderMetadata.NgayChungTu.deAccentedName).split(" ")[0]
     ),
     SoTienTrenHoaDon(
             "Số tiền trên hoá đơn",
@@ -56,7 +68,8 @@ public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11))
+            runs -> runs.forEach(run -> run.setFontSize(11)),
+            record -> NumberUtils.formatNumber1(ParserUtils.toDouble(MapUtils.getString(record, HoaDonHeaderMetadata.TongTienThanhToan.deAccentedName)))
     ),
     ToChucXuatHoaDon(
             "Tên, mã số thuế của đơn vị, tổ chức xuất hoá đơn",
@@ -67,7 +80,12 @@ public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11))
+            runs -> runs.forEach(run -> run.setFontSize(11)),
+            record -> {
+                String nhaCungCap = MapUtils.getString(record, HoaDonHeaderMetadata.NhaCungCap.deAccentedName);
+                NhaCungCapDTO dto = NhaCungCapDTO.nhaCungCapMap.get(nhaCungCap);
+                return String.format("%s\nSỐ TK: %s\nTẠI NH: %s", dto.getTenKhachHang(), dto.getSoTaiKhoan(), dto.getTenNganHang());
+            }
     ),
 
     ;
@@ -76,13 +94,15 @@ public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
     private final int ordinal;
     private final Consumer<XWPFTableCell> cellFormatConsumer;
     private final Consumer<List<XWPFRun>> runConsumer;
+    public final Function<Map<String, Object>, String> transformCallback;
 
 
-    DonCamKetTableHeaderInfoMetadata(String headerName, int ordinal, Consumer<XWPFTableCell> cellFormatConsumer, Consumer<List<XWPFRun>> runConsumer) {
+    DonCamKetTableHeaderInfoMetadata(String headerName, int ordinal, Consumer<XWPFTableCell> cellFormatConsumer, Consumer<List<XWPFRun>> runConsumer, Function<Map<String, Object>, String> transformCallback) {
         this.headerName = headerName;
         this.ordinal = ordinal;
         this.cellFormatConsumer = cellFormatConsumer;
         this.runConsumer = runConsumer;
+        this.transformCallback = transformCallback;
     }
 
     @Override

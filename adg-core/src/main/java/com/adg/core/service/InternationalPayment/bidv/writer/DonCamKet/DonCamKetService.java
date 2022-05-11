@@ -8,6 +8,9 @@ import com.merlin.asset.core.utils.JsonUtils;
 import com.merlin.asset.core.utils.MapUtils;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,10 +25,29 @@ public class DonCamKetService {
 
     private final static String template = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/ĐƠN CAM KẾT.docx";
 
-    public DonCamKetService(String outputFolder, Map<String, Object> data) {
+    public DonCamKetService(String outputFolder, List<Map<String, Object>> hoaDonRecords) {
         this.wordWriter = new WordWriter(template, AdgWordTableHeaderMetadata.getHeaderMapDonCamKet());
         this.outputFolder = outputFolder;
-        this.data = data;
+        this.data = this.transformHoaDonRecords(hoaDonRecords);
+    }
+
+
+    public Map<String, Object> transformHoaDonRecords(List<Map<String, Object>> hoaDonRecords) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> table = new ArrayList<>();
+
+        for (Map<String, Object> hoaDonRecord : hoaDonRecords) {
+            Map<String, Object> transformedRecord = new HashMap<>();
+            for (DonCamKetTableHeaderInfoMetadata headerInfoMetadata : DonCamKetTableHeaderInfoMetadata.values()) {
+                transformedRecord.put(headerInfoMetadata.getHeaderName(), headerInfoMetadata.transformCallback.apply(hoaDonRecord));
+            }
+            table.add(transformedRecord);
+        }
+        result.put("Danh mục hoá đơn diện tử", table);
+
+        result.put("Ngày giải ngân", DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue("dd/MM/yyyy")));
+        result.put("ngaykydoncamket", String.format("TP Hồ Chí Minh, ngày %s tháng %s năm %s", ZonedDateTime.now().getDayOfMonth(), ZonedDateTime.now().getMonthValue(), ZonedDateTime.now().getYear()));
+        return result;
     }
 
     public void exportDocument() {
@@ -60,8 +82,8 @@ public class DonCamKetService {
         String json = FileUtils.readContent(sampleDataFile);
         Map<String, Object> data = JsonUtils.fromJson(json, JsonUtils.TYPE_TOKEN.MAP_STRING_OBJECT.type);
 
-        DonCamKetService donCamKetService = new DonCamKetService(outputFolder, data);
-        donCamKetService.exportDocument();
+//        DonCamKetService donCamKetService = new DonCamKetService(outputFolder, data);
+//        donCamKetService.exportDocument();
     }
 
 }

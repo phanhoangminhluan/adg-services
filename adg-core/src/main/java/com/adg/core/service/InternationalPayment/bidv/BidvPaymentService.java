@@ -2,6 +2,9 @@ package com.adg.core.service.InternationalPayment.bidv;
 
 import com.adg.core.service.InternationalPayment.bidv.reader.HoaDonService;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Minh-Luan H. Phan
  * Created on: 2022.05.10 21:52
@@ -12,7 +15,11 @@ public class BidvPaymentService {
 
     public void exportDocuments(String fileHoaDon) {
         HoaDonService hoaDonService = new HoaDonService();
-        hoaDonService.readHoaDonTable(fileHoaDon);
+
+        List<Map<String, Object>> records = hoaDonService.readHoaDonTable(fileHoaDon);
+
+        Map<String, Object> transformedRecords = hoaDonService.transformHoaDonTable(records);
+
     }
 
 

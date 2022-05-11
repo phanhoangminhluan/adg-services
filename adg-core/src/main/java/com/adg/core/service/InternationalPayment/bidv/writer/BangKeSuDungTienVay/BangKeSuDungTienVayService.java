@@ -10,7 +10,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 
 import java.time.ZonedDateTime;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,26 +23,55 @@ public class BangKeSuDungTienVayService {
 
     private ExcelWriter excelWriter;
     private ExcelTable excelTable;
+    private Map<String, Object> data;
+    private String outputFolder;
 
-    private final static String INPUT_FILE = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/BẢNG KÊ SỬ DỤNG TIỀN VAY.xlsx";
-    private final static String OUTPUT_FILE = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/output";
+    private final static String template = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/BẢNG KÊ SỬ DỤNG TIỀN VAY.xlsx";
+//    private final static String OUTPUT_FILE = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/output";
 
-    public BangKeSuDungTienVayService() {
-        this.excelWriter = new ExcelWriter(INPUT_FILE);
+    public BangKeSuDungTienVayService(String outputFolder, List<Map<String, Object>> hoaDonRecords) {
+        this.outputFolder = outputFolder;
+        this.excelWriter = new ExcelWriter(template);
         this.excelWriter.openSheet();
         this.excelTable = new ExcelTable(this.excelWriter, AdgExcelTableHeaderMetadata.getBangKeSuDungTienVay());
+        this.data = this.transformHoaDonRecords(hoaDonRecords);
     }
 
-    public void insertRecordToTable(List<Map<String, Object>> items) {
-        items.forEach(item -> this.excelTable.insert(item));
+    public Map<String, Object> transformHoaDonRecords(List<Map<String, Object>> hoaDonRecords) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> bangKe = new ArrayList<>();
+
+        for (Map<String, Object> hoaDonRecord : hoaDonRecords) {
+            Map<String, Object> transformedRecord = new HashMap<>();
+            for (BangKeSuDungTienVayHeaderInfoMetadata headerInfoMetadata : BangKeSuDungTienVayHeaderInfoMetadata.values()) {
+                transformedRecord.put(headerInfoMetadata.getHeaderName(), headerInfoMetadata.transformCallback.apply(hoaDonRecord));
+            }
+            bangKe.add(transformedRecord);
+        }
+        result.put("Bảng kê", bangKe);
+        return result;
     }
 
-    public void build() {
+    public void insertRecordToTable() {
+        List<Map<String, Object>> records = MapUtils.getListMapStringObject(this.data, "Bảng kê");
+        records.forEach(item -> this.excelTable.insert(item));
+    }
+
+    public void exportDocument() {
+        this.insertRecordToTable();
+        this.excelTable.removeSampleRow();
+        this.fillSum();
+        this.fillDescription();
+        this.fillAdditionalDescription();
+        this.build();
+    }
+
+    private void build() {
         String fileName = String.format("BẢNG KÊ SỬ DỤNG TIỀN VAY - %s.xlsx", DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.MA_DATE_TIME_FORMATTER));
-        this.excelWriter.build(OUTPUT_FILE + "/" + fileName);
+        this.excelWriter.build(outputFolder + "/" + fileName);
     }
 
-    public void fillSum() {
+    private void fillSum() {
         Cell soTienHeaderCell = this.excelWriter.getCell(BangKeSuDungTienVayHeaderInfoMetadata.SoTien.getCellAddress());
         String startCell = this.excelWriter.getCell(
                 this.excelWriter.getRow(soTienHeaderCell.getRowIndex() + 1),
@@ -61,7 +91,7 @@ public class BangKeSuDungTienVayService {
         ExcelUtils.setCell(tongCell, String.format("SUM(%s:%s)", startCell, endCell), CellType.FORMULA);
     }
 
-    public void fillDescription() {
+    private void fillDescription() {
         String description = String.format(
                 "Chi tiết nội dung sử dụng tiền vay theo hợp đồng tín dụng ngắn hạn cụ thể số : 01.219/2021/8088928/HĐTD ngày %s được ký kết giữa Ngân hàng và Bên vay.",
                 DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue(DateTimeUtils.FMT_03))
@@ -71,7 +101,7 @@ public class BangKeSuDungTienVayService {
         originalCell.setCellValue(description);
     }
 
-    public void fillAdditionalDescription() {
+    private void fillAdditionalDescription() {
         String description = String.format(
                 "Bảng kê này là một bộ phận trong thể tách rời hợp đồng tín dụng ngắn hạn cụ thể số 01.219/2021/8088928/HĐTD ngày %s được ký kết giữa Ngân hàng và Bên vay.",
                 DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue(DateTimeUtils.FMT_03))
@@ -116,13 +146,13 @@ public class BangKeSuDungTienVayService {
                         " TẠI NH: MB-CN TÂN CẢNG, TP HCM")
                 .build();
 
-        BangKeSuDungTienVayService bangKeSuDungTienVayService = new BangKeSuDungTienVayService();
-        bangKeSuDungTienVayService.insertRecordToTable(Arrays.asList(item, item2, item3));
-        bangKeSuDungTienVayService.excelTable.removeSampleRow();
-        bangKeSuDungTienVayService.fillSum();
-        bangKeSuDungTienVayService.fillDescription();
-        bangKeSuDungTienVayService.fillAdditionalDescription();
-        bangKeSuDungTienVayService.build();
+//        BangKeSuDungTienVayService bangKeSuDungTienVayService = new BangKeSuDungTienVayService();
+//        bangKeSuDungTienVayService.insertRecordToTable(Arrays.asList(item, item2, item3));
+//        bangKeSuDungTienVayService.excelTable.removeSampleRow();
+//        bangKeSuDungTienVayService.fillSum();
+//        bangKeSuDungTienVayService.fillDescription();
+//        bangKeSuDungTienVayService.fillAdditionalDescription();
+//        bangKeSuDungTienVayService.build();
 
     }
 }

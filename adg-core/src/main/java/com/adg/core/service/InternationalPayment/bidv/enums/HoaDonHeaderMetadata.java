@@ -7,35 +7,39 @@ import com.merlin.asset.core.utils.StringUtils;
  * Created on: 2022.05.10 22:46
  */
 public enum HoaDonHeaderMetadata {
-    NgayHachToan("Ngày hạch toán", false, ExcelHeaderType.DATE),
-    SoChungTu("Số chứng từ", false, ExcelHeaderType.STRING),
-    NgayChungTu("Ngày chứng từ", false, ExcelHeaderType.DATE),
-    SoHoaDon("Số hoá đơn", false, ExcelHeaderType.STRING),
-    NhaCungCap("Nhà cung cấp", false, ExcelHeaderType.STRING),
-    DienGiai("Diễn giải", false, ExcelHeaderType.STRING),
-    TongTienHang("Tổng tiền hàng", false, ExcelHeaderType.DOUBLE),
-    TienChietKhau("Tiền chiết khấu", false, ExcelHeaderType.DOUBLE),
-    TienThueGTGT("Tiền thuế GTGT", false, ExcelHeaderType.DOUBLE),
-    TongTienThanhTOan("Tổng tiền thanh toán", false, ExcelHeaderType.DOUBLE),
-    ChiPhiMuaHang("Chi phí mua hàng", false, ExcelHeaderType.DOUBLE),
-    GiaTriNhapKho("Giá trị nhập kho", false, ExcelHeaderType.DOUBLE),
-    NhanHoaDon("Nhận hoá đơn", false, ExcelHeaderType.STRING),
-    LaChiPhiMuaHang("Là chi phí mua hàng", false, ExcelHeaderType.BOOLEAN),
-    LoaiChungTu("Loại chứng từ", false, ExcelHeaderType.STRING),
-    PhiTruocHaiQuan("Phí trước hải quan", false, ExcelHeaderType.DOUBLE),
-    TienThueNK("Tiền thuế NK", false, ExcelHeaderType.DOUBLE),
-    TienThueTTDB("Tiền thuế TTĐB", false, ExcelHeaderType.DOUBLE),
-    SoChungTuSoQT("Số chứng từ (Sổ QT)", true, ExcelHeaderType.DOUBLE),
+    NgayHachToan("Ngày hạch toán", false, true, AdgHeaderType.DATE),
+    SoChungTu("Số chứng từ", false, true, AdgHeaderType.STRING),
+    NgayChungTu("Ngày chứng từ", false, true, AdgHeaderType.DATE),
+    SoHoaDon("Số hoá đơn", false, true, AdgHeaderType.STRING),
+    NhaCungCap("Nhà cung cấp", false, true, AdgHeaderType.STRING),
+    DienGiai("Diễn giải", false, true, AdgHeaderType.STRING),
+    TongTienHang("Tổng tiền hàng", false, true, AdgHeaderType.DOUBLE),
+    TienChietKhau("Tiền chiết khấu", false, true, AdgHeaderType.DOUBLE),
+    TienThueGTGT("Tiền thuế GTGT", false, true, AdgHeaderType.DOUBLE),
+    TongTienThanhToan("Tổng tiền thanh toán", false, true, AdgHeaderType.DOUBLE),
+    ChiPhiMuaHang("Chi phí mua hàng", false, true, AdgHeaderType.DOUBLE),
+    GiaTriNhapKho("Giá trị nhập kho", false, true, AdgHeaderType.DOUBLE),
+    NhanHoaDon("Nhận hoá đơn", false, true, AdgHeaderType.STRING),
+    LaChiPhiMuaHang("Là chi phí mua hàng", false, true, AdgHeaderType.BOOLEAN),
+    LoaiChungTu("Loại chứng từ", false, true, AdgHeaderType.STRING),
+    PhiTruocHaiQuan("Phí trước hải quan", false, true, AdgHeaderType.DOUBLE),
+    TienThueNK("Tiền thuế NK", false, true, AdgHeaderType.DOUBLE),
+    TienThueTTDB("Tiền thuế TTĐB", false, true, AdgHeaderType.DOUBLE),
+    SoChungTuSoQT("Số chứng từ (Sổ QT)", true, true, AdgHeaderType.DOUBLE),
+    SoThuTuKhongGop("Số thứ tự không gộp", true, false, AdgHeaderType.INTEGER),
+    SoThuTuCoGop("Số thứ tự có gộp", true, false, AdgHeaderType.INTEGER),
     ;
     public final String name;
     public final String deAccentedName;
     public final boolean isNullable;
-    public final ExcelHeaderType type;
+    public final boolean isOriginalField;
+    public final AdgHeaderType type;
 
-    HoaDonHeaderMetadata(String name, boolean isNullable, ExcelHeaderType type) {
+    HoaDonHeaderMetadata(String name, boolean isNullable, boolean isOriginalField, AdgHeaderType type) {
         this.name = name;
         this.deAccentedName = StringUtils.deAccent(this.name);
         this.isNullable = isNullable;
+        this.isOriginalField = isOriginalField;
         this.type = type;
     }
 }

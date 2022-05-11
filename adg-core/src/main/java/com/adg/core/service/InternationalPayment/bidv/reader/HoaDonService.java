@@ -2,16 +2,15 @@ package com.adg.core.service.InternationalPayment.bidv.reader;
 
 import com.adg.core.OfficeHandler.excel.ExcelReader;
 import com.adg.core.service.InternationalPayment.bidv.enums.HoaDonHeaderMetadata;
+import com.adg.core.service.InternationalPayment.bidv.writer.BangKeSuDungTienVay.BangKeSuDungTienVayService;
+import com.adg.core.service.InternationalPayment.bidv.writer.DonCamKet.DonCamKetService;
 import com.merlin.asset.core.utils.MapUtils;
 import com.merlin.asset.core.utils.ParserUtils;
 import com.merlin.asset.core.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Minh-Luan H. Phan
@@ -28,6 +27,81 @@ public class HoaDonService {
 
         return MapUtils.getListMapStringObject(output, "records");
     }
+
+    public Map<String, Object> transformHoaDonTable(List<Map<String, Object>> records) {
+
+        Map<String, Object> transformedHoaDon = this.mapByNhaCungCap(records);
+        Map<String, Object> mapByNhaCungCap = MapUtils.getMapStringObject(transformedHoaDon, "Map by nhà cung cấp");
+
+        List<Map<String, Object>> sortedListBySttKhongGop = MapUtils.getListMapStringObject(transformedHoaDon, "Số thứ tự không gộp");
+        List<Map<String, Object>> sortedListBySttCoGop = MapUtils.getListMapStringObject(transformedHoaDon, "Số thứ tự có gộp");
+
+        String outputFolder = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/output";
+
+
+        BangKeSuDungTienVayService bangKeSuDungTienVayService = new BangKeSuDungTienVayService(outputFolder, sortedListBySttKhongGop);
+        bangKeSuDungTienVayService.exportDocument();
+
+        DonCamKetService donCamKetService = new DonCamKetService(outputFolder, sortedListBySttKhongGop);
+        donCamKetService.exportDocument();
+
+        return mapByNhaCungCap;
+
+    }
+
+    private Map<String, Object> mapByNhaCungCap(List<Map<String, Object>> records) {
+        Map<String, Object> mapByNhaCungCap = new HashMap<>();
+        List<Map<String, Object>> sortedBySttKhongGop = new ArrayList<>();
+        List<Map<String, Object>> sortedBySttCoGop = new ArrayList<>();
+        int sttGop = 0;
+        int sttKhongGop = 1;
+        for (Map<String, Object> record : records) {
+            Map<String, Object> deAccentedRecord = this.deAccentAllKeys(record);
+            String nhaCungCap = MapUtils.getString(deAccentedRecord, HoaDonHeaderMetadata.NhaCungCap.deAccentedName);
+            String soHoaDon = MapUtils.getString(deAccentedRecord, HoaDonHeaderMetadata.SoHoaDon.deAccentedName);
+            Map<String, Object> dsHoaDonNhaCungCap = MapUtils.getMapStringObject(mapByNhaCungCap, nhaCungCap, new HashMap<>());
+            Map<String, Object> hoaDonCuThe = MapUtils.getMapStringObject(dsHoaDonNhaCungCap, soHoaDon, new HashMap<>());
+
+            if (dsHoaDonNhaCungCap.isEmpty()) {
+                sttGop++;
+            }
+
+            for (HoaDonHeaderMetadata hoaDonHeaderMetadata : HoaDonHeaderMetadata.values()) {
+                if (hoaDonHeaderMetadata.isOriginalField) {
+                    hoaDonCuThe.put(hoaDonHeaderMetadata.deAccentedName, MapUtils.getString(deAccentedRecord, hoaDonHeaderMetadata.deAccentedName));
+                } else {
+                    switch (hoaDonHeaderMetadata) {
+                        case SoThuTuKhongGop: {
+                            hoaDonCuThe.put(hoaDonHeaderMetadata.deAccentedName, sttKhongGop);
+                            break;
+                        }
+                        case SoThuTuCoGop: {
+                            hoaDonCuThe.put(hoaDonHeaderMetadata.deAccentedName, sttGop);
+                            break;
+                        }
+                    }
+                }
+            }
+            sortedBySttKhongGop.add(hoaDonCuThe);
+            sortedBySttCoGop.add(hoaDonCuThe);
+            dsHoaDonNhaCungCap.put(soHoaDon, hoaDonCuThe);
+            mapByNhaCungCap.put(nhaCungCap, dsHoaDonNhaCungCap);
+
+            sttKhongGop++;
+        }
+
+        sortedBySttKhongGop.sort(Comparator.comparingInt(m -> MapUtils.getInt(m, HoaDonHeaderMetadata.SoThuTuKhongGop.deAccentedName)));
+        sortedBySttCoGop.sort(Comparator.comparingInt(m -> MapUtils.getInt(m, HoaDonHeaderMetadata.SoThuTuCoGop.deAccentedName)));
+
+
+
+        return MapUtils.ImmutableMap()
+                .put("Số thứ tự có gộp", sortedBySttCoGop)
+                .put("Số thứ tự không gộp", sortedBySttKhongGop)
+                .put("Map by nhà cung cấp", mapByNhaCungCap)
+                .build();
+    }
+
 
     private void validate(Map<String, Object> output) {
         List<String> headerErrorMessages = this.validateHeaders(MapUtils.getListMapStringObject(output, "headers"));
@@ -56,6 +130,9 @@ public class HoaDonService {
 
         for (HoaDonHeaderMetadata hoaDonHeaderMetadata : HoaDonHeaderMetadata.values()) {
             boolean found = false;
+            if (!hoaDonHeaderMetadata.isOriginalField) {
+                continue;
+            }
             for (Map<String, Object> headerMap : headers) {
                 if (StringUtils
                         .deAccent(MapUtils.getString(headerMap, "name"))
