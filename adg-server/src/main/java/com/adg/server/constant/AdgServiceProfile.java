@@ -1,5 +1,6 @@
 package com.adg.server.constant;
 
+import com.adg.api.accounting.AdgApiApplication;
 import com.adg.loader.AdgLoaderApplication;
 import com.adg.scheduler.AdgSchedulerApplication;
 import com.merlin.asset.core.starter.ServerApplication;
@@ -9,7 +10,8 @@ import java.util.function.Consumer;
 public enum AdgServiceProfile {
 
     SCHEDULER(AdgSchedulerApplication.class, AdgSchedulerApplication::main),
-    LOADER(AdgLoaderApplication.class, AdgLoaderApplication::main);
+    LOADER(AdgLoaderApplication.class, AdgLoaderApplication::main),
+    API(AdgApiApplication .class, AdgApiApplication::main);
 
     public final Class<? extends ServerApplication> startupClass;
     public final Consumer<String[]> mainMethod;

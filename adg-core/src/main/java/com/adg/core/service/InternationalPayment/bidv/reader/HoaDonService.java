@@ -9,13 +9,20 @@ import com.adg.core.service.InternationalPayment.bidv.writer.DonCamKet.DonCamKet
 import com.adg.core.service.InternationalPayment.bidv.writer.DonMuaHang.DonMuaHangService;
 import com.adg.core.service.InternationalPayment.bidv.writer.HopDongTinDung.HopDongTinDungService;
 import com.adg.core.service.InternationalPayment.bidv.writer.UyNhiemChi.UyNhiemChiService;
+import com.adg.core.utils.ZipUtil;
 import com.merlin.asset.core.utils.DateTimeUtils;
 import com.merlin.asset.core.utils.MapUtils;
 import com.merlin.asset.core.utils.ParserUtils;
 import com.merlin.asset.core.utils.StringUtils;
+import lombok.SneakyThrows;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -25,9 +32,20 @@ import java.util.stream.Collectors;
  * @author Minh-Luan H. Phan
  * Created on: 2022.05.10 21:47
  */
+@Service
 public class HoaDonService {
 
     private static final Logger logger = LoggerFactory.getLogger(HoaDonService.class);
+
+    public static final String outputFolder = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/output/%s";
+    public static final String outputZipFolder = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/output/zip/";
+
+    private String getOutputFolder() {
+        String path = String.format(outputFolder, DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue("yyyy/MM/dd/HHmmss")));
+        File file = new File(path);
+        file.mkdirs();
+        return path;
+    }
 
     public List<Map<String, Object>> readHoaDonTable(String fileHoaDonPath) {
         ExcelReader excelReader = new ExcelReader(fileHoaDonPath);
@@ -80,7 +98,7 @@ public class HoaDonService {
         return phieuNhapKhoByNCC;
     }
 
-    public Map<String, Object> parsePhieuNhapKhoDescription(String description) {
+    private Map<String, Object> parsePhieuNhapKhoDescription(String description) {
         Map<String, Object> output = new HashMap<>();
         List<String> arr = Arrays.asList(description.split("của"));
         String ncc = arr.get(1).trim();
@@ -103,42 +121,60 @@ public class HoaDonService {
         return output;
     }
 
-    public void transformHoaDonTable(List<Map<String, Object>> records) {
+    @SneakyThrows
+    public byte[] exportDocuments(List<Map<String, Object>> hoaDonRecords, Map<String, Object> pnkRecords) {
+        String folder = this.getOutputFolder();
+        String zipPath = outputZipFolder + String.format("hoso_%s.zip", System.currentTimeMillis());
+        this.transformHoaDonTable(hoaDonRecords, folder);
+        this.transformPhieuNhapKho(pnkRecords, folder);
+        ZipUtil.zipFolder(Paths.get(folder), Paths.get(zipPath));
+
+        return IOUtils.toByteArray(new FileInputStream(zipPath));
+    }
+
+    public void transformHoaDonTable(List<Map<String, Object>> records, String folder) {
 
         Map<String, Object> transformedHoaDon = this.mapByNhaCungCap(records);
         Map<String, Object> mapByNhaCungCap = MapUtils.getMapStringObject(transformedHoaDon, "Map by nhà cung cấp");
 
         List<Map<String, Object>> sortedListBySttKhongGop = MapUtils.getListMapStringObject(transformedHoaDon, "Số thứ tự không gộp");
 
-        String outputFolder = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/output";
 
 
-        BangKeSuDungTienVayService bangKeSuDungTienVayService = new BangKeSuDungTienVayService(outputFolder, sortedListBySttKhongGop);
+        BangKeSuDungTienVayService bangKeSuDungTienVayService = new BangKeSuDungTienVayService(folder, sortedListBySttKhongGop);
         bangKeSuDungTienVayService.exportDocument();
+        logger.info("Export BangKeSuDungTienVayService");
 
-        DonCamKetService donCamKetService = new DonCamKetService(outputFolder, sortedListBySttKhongGop);
+        DonCamKetService donCamKetService = new DonCamKetService(folder, sortedListBySttKhongGop);
         donCamKetService.exportDocument();
+        logger.info("Export DonCamKetService");
 
-        BienBanKiemTraSuDungVonVayService bienBanKiemTraSuDungVonVayService = new BienBanKiemTraSuDungVonVayService(outputFolder, mapByNhaCungCap);
+        BienBanKiemTraSuDungVonVayService bienBanKiemTraSuDungVonVayService = new BienBanKiemTraSuDungVonVayService(folder, mapByNhaCungCap);
         bienBanKiemTraSuDungVonVayService.exportDocument();
+        logger.info("Export BienBanKiemTraSuDungVonVayService");
 
-        HopDongTinDungService hopDongTinDungService = new HopDongTinDungService(outputFolder, mapByNhaCungCap);
+        HopDongTinDungService hopDongTinDungService = new HopDongTinDungService(folder, mapByNhaCungCap);
         hopDongTinDungService.exportDocument();
+        logger.info("Export HopDongTinDungService");
+
 
         for (String ncc : mapByNhaCungCap.keySet()) {
-            UyNhiemChiService uyNhiemChiService = new UyNhiemChiService(outputFolder, MapUtils.getMapStringObject(mapByNhaCungCap, ncc));
+            UyNhiemChiService uyNhiemChiService = new UyNhiemChiService(folder, MapUtils.getMapStringObject(mapByNhaCungCap, ncc));
             uyNhiemChiService.exportDocument();
+            logger.info("Export UyNhiemChiService");
+
         }
     }
 
-    public void transformPhieuNhapKho(Map<String, Object> phieuNhapKhoMap) {
-        String outputFolder = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/output";
+    public void transformPhieuNhapKho(Map<String, Object> phieuNhapKhoMap, String folder) {
 
         for (String ncc : phieuNhapKhoMap.keySet()) {
             Map<String, Object> donHangMap = MapUtils.getMapStringObject(phieuNhapKhoMap, ncc);
             for (String soHoaDon : donHangMap.keySet()) {
-                DonMuaHangService donMuaHangService = new DonMuaHangService(outputFolder, MapUtils.getListMapStringObject(donHangMap, soHoaDon), soHoaDon);
+                DonMuaHangService donMuaHangService = new DonMuaHangService(folder, MapUtils.getListMapStringObject(donHangMap, soHoaDon), soHoaDon);
                 donMuaHangService.exportDocument();
+                logger.info("Export DonMuaHangService");
+
             }
         }
     }
