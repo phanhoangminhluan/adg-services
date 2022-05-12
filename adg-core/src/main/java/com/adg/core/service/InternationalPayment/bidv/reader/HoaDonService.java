@@ -18,6 +18,7 @@ import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -37,8 +38,14 @@ public class HoaDonService {
 
     private static final Logger logger = LoggerFactory.getLogger(HoaDonService.class);
 
-    public static final String outputFolder = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/output/%s";
-    public static final String outputZipFolder = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/output/zip/";
+    @Value("${international-payment.bidv.output.files}")
+    private String outputFolder;
+
+    @Value("${international-payment.bidv.output.zip}")
+    private String outputZipFolder;
+
+//    public static final String outputFolder = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/output/%s";
+//    public static final String outputZipFolder = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/output/zip/";
 
     private String getOutputFolder() {
         String path = String.format(outputFolder, DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.getFormatterWithDefaultValue("yyyy/MM/dd/HHmmss")));
