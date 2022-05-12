@@ -39,7 +39,13 @@ public class HoaDonService {
                 .put("headers", MapUtils.getListMapStringObject(output, "headers"))
                 .put("records", actualRecords)
                 .build());
-        return actualRecords;
+
+        List<Map<String, Object>> deAccentedRecords = new ArrayList<>();
+        for (Map<String, Object> record : actualRecords) {
+            deAccentedRecords.add(this.deAccentAllKeys(record));
+        }
+
+        return deAccentedRecords;
     }
 
     public Map<String, Object> readPhieuNhapKho(List<String> listFilePhieuNhapKho) {
@@ -103,7 +109,6 @@ public class HoaDonService {
         Map<String, Object> mapByNhaCungCap = MapUtils.getMapStringObject(transformedHoaDon, "Map by nhà cung cấp");
 
         List<Map<String, Object>> sortedListBySttKhongGop = MapUtils.getListMapStringObject(transformedHoaDon, "Số thứ tự không gộp");
-        List<Map<String, Object>> sortedListBySttCoGop = MapUtils.getListMapStringObject(transformedHoaDon, "Số thứ tự có gộp");
 
         String outputFolder = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/output";
 
@@ -145,9 +150,9 @@ public class HoaDonService {
         int sttGop = 0;
         int sttKhongGop = 1;
         for (Map<String, Object> record : records) {
-            Map<String, Object> deAccentedRecord = this.deAccentAllKeys(record);
-            String nhaCungCap = MapUtils.getString(deAccentedRecord, HoaDonHeaderMetadata.NhaCungCap.deAccentedName);
-            String soHoaDon = MapUtils.getString(deAccentedRecord, HoaDonHeaderMetadata.SoHoaDon.deAccentedName);
+//            Map<String, Object> deAccentedRecord = this.deAccentAllKeys(record);
+            String nhaCungCap = MapUtils.getString(record, HoaDonHeaderMetadata.NhaCungCap.deAccentedName);
+            String soHoaDon = MapUtils.getString(record, HoaDonHeaderMetadata.SoHoaDon.deAccentedName);
             Map<String, Object> dsHoaDonNhaCungCap = MapUtils.getMapStringObject(mapByNhaCungCap, nhaCungCap, new HashMap<>());
             Map<String, Object> hoaDonCuThe = MapUtils.getMapStringObject(dsHoaDonNhaCungCap, soHoaDon, new HashMap<>());
 
@@ -157,7 +162,7 @@ public class HoaDonService {
 
             for (HoaDonHeaderMetadata hoaDonHeaderMetadata : HoaDonHeaderMetadata.values()) {
                 if (hoaDonHeaderMetadata.isOriginalField) {
-                    hoaDonCuThe.put(hoaDonHeaderMetadata.deAccentedName, MapUtils.getString(deAccentedRecord, hoaDonHeaderMetadata.deAccentedName));
+                    hoaDonCuThe.put(hoaDonHeaderMetadata.deAccentedName, MapUtils.getString(record, hoaDonHeaderMetadata.deAccentedName));
                 } else {
                     switch (hoaDonHeaderMetadata) {
                         case SoThuTuKhongGop: {
@@ -277,7 +282,7 @@ public class HoaDonService {
 
     private Map<String, Object> deAccentAllKeys(Map<String, Object> record) {
         Map<String, Object> deAccentedRecord = new HashMap<>();
-        record.forEach((key, val) -> deAccentedRecord.put(StringUtils.deAccent(key), val));
+        record.forEach((key, val) -> deAccentedRecord.put(StringUtils.makeCamelCase(key), val));
         return deAccentedRecord;
     }
 

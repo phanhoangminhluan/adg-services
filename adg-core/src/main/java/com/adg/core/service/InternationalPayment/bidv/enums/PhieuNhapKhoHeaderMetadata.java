@@ -29,7 +29,7 @@ public enum PhieuNhapKhoHeaderMetadata {
 
     PhieuNhapKhoHeaderMetadata(String name, boolean isNullable, boolean isOriginalField, AdgHeaderType type) {
         this.name = name;
-        this.deAccentedName = StringUtils.deAccent(this.name);
+        this.deAccentedName = StringUtils.makeCamelCase(this.name);
         this.isNullable = isNullable;
         this.isOriginalField = isOriginalField;
         this.type = type;

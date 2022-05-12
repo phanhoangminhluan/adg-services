@@ -1,6 +1,7 @@
 package com.adg.core.service.InternationalPayment.bidv;
 
 import com.adg.core.service.InternationalPayment.bidv.reader.HoaDonService;
+import com.merlin.asset.core.utils.JsonUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,10 +19,13 @@ public class BidvPaymentService {
         HoaDonService hoaDonService = new HoaDonService();
 
         List<Map<String, Object>> hoaDonRecords = hoaDonService.readHoaDonTable("/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/SampleData/HoaDon02.xlsx");
+
+        System.out.println(JsonUtils.toJson(hoaDonRecords));
         Map<String, Object> phieuNhapKhoMap = hoaDonService.readPhieuNhapKho(Arrays.asList(
                 "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/SampleData/PNK 006.xls",
                 "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/SampleData/PNK 008.xls"
         ));
+        System.out.println(JsonUtils.toJson(phieuNhapKhoMap));
 
         hoaDonService.transformHoaDonTable(hoaDonRecords);
         hoaDonService.transformPhieuNhapKho(phieuNhapKhoMap);
