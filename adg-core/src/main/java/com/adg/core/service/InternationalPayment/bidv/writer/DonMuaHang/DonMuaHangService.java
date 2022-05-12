@@ -43,7 +43,7 @@ public class DonMuaHangService {
         public static final String DIEN_GIAI = "B12";
     }
 
-    private final static String template = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/ĐƠN MUA HÀNG.xlsx";
+    private final static String template = "./adg-server/src/main/resources/bidv/ĐƠN MUA HÀNG.xlsx";
 
     public DonMuaHangService(String outputFolder, List<Map<String, Object>> phieuNhapKhoRecords, String soHoaDon) {
         this.outputFolder = outputFolder;

@@ -26,7 +26,7 @@ public class BienBanKiemTraSuDungVonVayService {
     private final String outputFolder;
     private final Map<String, Object> data;
 
-    private final static String template = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/BIÊN BẢN KIỂM TRA SỬ DỤNG VỐN VAY.docx";
+    private final static String template = "./adg-server/src/main/resources/bidv/BIÊN BẢN KIỂM TRA SỬ DỤNG VỐN VAY.docx";
 
     public BienBanKiemTraSuDungVonVayService(String outputFolder, Map<String, Object> hoaDonRecords) {
         this.wordWriter = new WordWriter(template, AdgWordTableHeaderMetadata.getHeaderBienBanKiemTraSuDungVonVay());

@@ -26,7 +26,7 @@ public class BangKeSuDungTienVayService {
     private Map<String, Object> data;
     private String outputFolder;
 
-    private final static String template = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/BẢNG KÊ SỬ DỤNG TIỀN VAY.xlsx";
+    private final static String template = "./adg-server/src/main/resources/bidv/BẢNG KÊ SỬ DỤNG TIỀN VAY.xlsx";
 //    private final static String OUTPUT_FILE = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/output";
 
     public BangKeSuDungTienVayService(String outputFolder, List<Map<String, Object>> hoaDonRecords) {

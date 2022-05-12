@@ -20,7 +20,7 @@ public class UyNhiemChiService {
     private final String outputFolder;
     private final Map<String, Object> data;
 
-    private final static String template = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/UỶ NHIỆM CHI.docx";
+    private final static String template = "./adg-server/src/main/resources/bidv/UỶ NHIỆM CHI.docx";
 
     public UyNhiemChiService(String outputFolder, Map<String, Object> data) {
         this.wordWriter = new WordWriter(template, new HashMap<>());

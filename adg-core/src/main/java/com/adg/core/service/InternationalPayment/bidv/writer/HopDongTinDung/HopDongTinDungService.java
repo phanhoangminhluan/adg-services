@@ -26,7 +26,7 @@ public class HopDongTinDungService {
     private final String outputFolder;
     private final Map<String, Object> data;
 
-    private final static String template = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/HỢP ĐÒNG TÍN DỤNG.docx";
+    private final static String template = "./adg-server/src/main/resources/bidv/HỢP ĐÒNG TÍN DỤNG.docx";
 
     public HopDongTinDungService(String outputFolder, Map<String, Object> hoaDonRecords) {
         this.wordWriter = new WordWriter(template, AdgWordTableHeaderMetadata.getHeaderMapHopDongTinDung());

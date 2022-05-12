@@ -23,7 +23,7 @@ public class DonCamKetService {
     private final String outputFolder;
     private final Map<String, Object> data;
 
-    private final static String template = "/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/bidv/ĐƠN CAM KẾT.docx";
+    private final static String template = "./adg-server/src/main/resources/bidv/ĐƠN CAM KẾT.docx";
 
     public DonCamKetService(String outputFolder, List<Map<String, Object>> hoaDonRecords) {
         this.wordWriter = new WordWriter(template, AdgWordTableHeaderMetadata.getHeaderMapDonCamKet());
