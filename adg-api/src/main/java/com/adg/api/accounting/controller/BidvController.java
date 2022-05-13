@@ -21,6 +21,7 @@ import java.util.Map;
  * Created on: 2022.05.12 02:25
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/internal/internation-payment/disbursement/bidv/")
 public class BidvController {
 
