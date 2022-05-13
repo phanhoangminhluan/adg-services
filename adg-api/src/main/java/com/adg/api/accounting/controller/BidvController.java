@@ -41,10 +41,10 @@ public class BidvController {
             String fileHoaDon = "";
             List<String> filePNK = new ArrayList<>();
             for (File f : files) {
-                if (f.getName().startsWith("hd")) {
-                    fileHoaDon = f.getAbsolutePath();
-                } else {
+                if (f.getName().toLowerCase().startsWith("pnk")) {
                     filePNK.add(f.getAbsolutePath());
+                } else {
+                    fileHoaDon = f.getAbsolutePath();
                 }
             }
             List<Map<String, Object>> hoaDonMap = this.hoaDonService.readHoaDonTable(fileHoaDon);
