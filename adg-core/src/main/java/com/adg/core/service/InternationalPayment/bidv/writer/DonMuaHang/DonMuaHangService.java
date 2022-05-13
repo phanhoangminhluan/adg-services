@@ -85,7 +85,7 @@ public class DonMuaHangService {
                 transformedRecord.put(headerInfoMetadata.getHeaderName(), headerInfoMetadata.transformCallback.apply(phieuNhapKhoRecord));
                 switch (headerInfoMetadata) {
                     case ThanhTien: {
-                        thanhTien += MapUtils.getDouble(phieuNhapKhoRecord, PhieuNhapKhoHeaderMetadata.ThanhTien.deAccentedName);
+                        thanhTien += Math.round((MapUtils.getDouble(phieuNhapKhoRecord, PhieuNhapKhoHeaderMetadata.ThanhTien.deAccentedName) * 1.1));
                     }
                 }
             }
