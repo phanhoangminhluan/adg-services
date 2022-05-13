@@ -2,7 +2,7 @@
 
 
 PROJECT_PATH="/home/ubuntu/adg-services"
-SCRIPT_PATH="./scripts/start-application/customized-run/run-server.sh"
+SCRIPT_PATH="./scripts/start-application/prod/customized-run/run-server.sh"
 
 CLASSES="$PROJECT_PATH/adg-api/target/classes"
 
