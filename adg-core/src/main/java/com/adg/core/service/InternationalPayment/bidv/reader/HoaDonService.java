@@ -105,6 +105,37 @@ public class HoaDonService {
         return phieuNhapKhoByNCC;
     }
 
+    public List<Map<String, Object>> convertPnkToDTO(Map<String, Object> mapPnk) {
+        List<Map<String, Object>> listPnk = new ArrayList<>();
+
+        for (String nhaCungCap : mapPnk.keySet()) {
+            Map<String, Object> hoaDonCuaNcc = MapUtils.getMapStringObject(mapPnk, nhaCungCap);
+            for (String soHoaDon : hoaDonCuaNcc.keySet()) {
+                List<Map<String, Object>> listSanPham = MapUtils.getListMapStringObject(hoaDonCuaNcc, soHoaDon);
+                listPnk.addAll(listSanPham);
+            }
+        }
+        return listPnk;
+    }
+
+    public Map<String, Object> convertDtoToPnk(List<Map<String, Object>> listPnk) {
+        Map<String, Object> mapPnk = new HashMap<>();
+
+        for (Map<String, Object> pnk : listPnk) {
+            String ncc = MapUtils.getString(pnk, PhieuNhapKhoHeaderMetadata.NhaCungCap.deAccentedName);
+            String soHoaDon = MapUtils.getString(pnk, PhieuNhapKhoHeaderMetadata.SoHoaDon.deAccentedName);
+
+            Map<String, Object> hoaDonCuaNcc = MapUtils.getMapStringObject(pnk, ncc, new HashMap<>());
+
+            List<Map<String, Object>> sanPhamCuaHoaDon = MapUtils.getListMapStringObject(hoaDonCuaNcc, soHoaDon, new ArrayList<>());
+            sanPhamCuaHoaDon.add(pnk);
+
+            hoaDonCuaNcc.put(soHoaDon, sanPhamCuaHoaDon);
+            mapPnk.put(ncc,hoaDonCuaNcc );
+        }
+        return mapPnk;
+    }
+
     private Map<String, Object> parsePhieuNhapKhoDescription(String description) {
         Map<String, Object> output = new HashMap<>();
         List<String> arr = Arrays.asList(description.split("của"));

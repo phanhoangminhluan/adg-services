@@ -6,6 +6,7 @@ import com.merlin.asset.core.utils.JsonUtils;
 import com.merlin.asset.core.utils.MapUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,8 @@ public class BidvController {
     @Autowired
     private HoaDonService hoaDonService;
 
+    @Value("${international-payment.bidv.input.zip}")
+    private String inputZip;
 
 
     @PostMapping("import")
@@ -33,7 +36,7 @@ public class BidvController {
     public String importFile(@RequestParam("file") MultipartFile file) {
         List<File> files = new ArrayList<>();
         try {
-            files = ZipUtil.uncompressZipFile( file.getInputStream(),"/Users/luan.phm/engineering/Projects/ADongGroup/adg-services/adg-api/src/main/resources/outputzip");
+            files = ZipUtil.uncompressZipFile( file.getInputStream(), inputZip);
             String fileHoaDon = "";
             List<String> filePNK = new ArrayList<>();
             for (File f : files) {
@@ -49,7 +52,7 @@ public class BidvController {
             return JsonUtils.toJson(MapUtils.ImmutableMap()
                             .put("data", MapUtils.ImmutableMap()
                                     .put("hd", hoaDonMap)
-                                    .put("pnk", pnkMap)
+                                    .put("pnk", this.hoaDonService.convertPnkToDTO(pnkMap))
                                     .build())
                             .put("status", "ok")
                     .build());
@@ -72,9 +75,9 @@ public class BidvController {
             Map<String, Object> data = MapUtils.getMapStringObject(request, "data");
             List<Map<String, Object>> hd = MapUtils.getListMapStringObject(data, "hd");
             System.out.println(JsonUtils.toJson(hd));
-            Map<String, Object> pnk = MapUtils.getMapStringObject(data, "pnk");
+            List<Map<String, Object>> pnk = MapUtils.getListMapStringObject(data, "pnk");
             System.out.println(JsonUtils.toJson(pnk));
-            return this.hoaDonService.exportDocuments(hd, pnk);
+            return this.hoaDonService.exportDocuments(hd, this.hoaDonService.convertDtoToPnk(pnk));
         } catch (Exception exception) {
             exception.printStackTrace();
         }
