@@ -17,18 +17,18 @@
         <module>adg-api</module>
     </modules>
 
-    <repositories>
-        <repository>
-            <id>project.local</id>
-            <name>project</name>
-            <url>file:/Users/luan.phm/engineering/Projects/merlin/merlin-asset/deployed-jar</url>
-        </repository>
-        <repository>
-            <id>merlin-mapper.local</id>
-            <name>merlin-mapper</name>
-            <url>file:/Users/luan.phm/engineering/Projects/merlin/merlin-mapper/deployed-jar</url>
-        </repository>
-    </repositories>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>project.local</id>-->
+<!--            <name>project</name>-->
+<!--            <url>file:/Users/luan.phm/engineering/Projects/merlin/merlin-asset/deployed-jar</url>-->
+<!--        </repository>-->
+<!--        <repository>-->
+<!--            <id>merlin-mapper.local</id>-->
+<!--            <name>merlin-mapper</name>-->
+<!--            <url>file:/Users/luan.phm/engineering/Projects/merlin/merlin-mapper/deployed-jar</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
 
     <dependencyManagement>
         <dependencies>
