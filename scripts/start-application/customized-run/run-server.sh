@@ -32,6 +32,8 @@ echo ""
 echo "RUNNING COMMAND: START ------------------------------------------------------------------------------------------------------------"
 
 echo java \
+  -Xms256M \
+  -Xmx512M \
        -Dspring.profiles.active="$ACTIVE_PROFILE-$MODE" \
        -Dlogging.config="$LOGBACK_PATH" \
        -DACTIVE_PROFILE="$ACTIVE_PROFILE" \
