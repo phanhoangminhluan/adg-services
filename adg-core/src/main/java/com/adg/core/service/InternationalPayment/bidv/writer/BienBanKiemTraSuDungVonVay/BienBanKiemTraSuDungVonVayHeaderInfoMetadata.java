@@ -30,7 +30,10 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
             cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
             WordUtils.Table.makeCenter(cell);
         },
-        runs -> runs.forEach(run -> run.setFontSize(11)),
+        runs -> runs.forEach(run -> {
+            run.setFontSize(11);
+            run.setFontFamily("Times New Roman");
+        }),
         record -> MapUtils.getString(record, HoaDonHeaderMetadata.SoThuTuCoGop.deAccentedName)
     ),
     NoiDung(
@@ -42,7 +45,10 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11)),
+            runs -> runs.forEach(run -> {
+                run.setFontSize(11);
+                run.setFontFamily("Times New Roman");
+            }),
             record -> {
                 List<String> listSoHoaDon = MapUtils.getListString(record, HoaDonHeaderMetadata.ListSoHoaDon.deAccentedName);
                 return String.format("Thanh toán tiền hàng theo hoá đơn %s hết.", String.join(", ", listSoHoaDon));
@@ -58,7 +64,10 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11)),
+            runs -> runs.forEach(run -> {
+                run.setFontSize(11);
+                run.setFontFamily("Times New Roman");
+            }),
             record -> "UNC"
     ),
     SoTienVND(
@@ -70,7 +79,10 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11)),
+            runs -> runs.forEach(run -> {
+                run.setFontSize(11);
+                run.setFontFamily("Times New Roman");
+            }),
             record -> NumberUtils.formatNumber1(ParserUtils.toDouble(MapUtils.getString(record, HoaDonHeaderMetadata.TongTienThanhToanCacHoaDon.deAccentedName)))
     ),
     TenDonVi(
@@ -82,7 +94,10 @@ public enum BienBanKiemTraSuDungVonVayHeaderInfoMetadata implements AdgWordTable
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11)),
+            runs -> runs.forEach(run -> {
+                run.setFontSize(11);
+                run.setFontFamily("Times New Roman");
+            }),
             record -> {
                 String nhaCungCap = MapUtils.getString(record, HoaDonHeaderMetadata.NhaCungCap.deAccentedName);
                 NhaCungCapDTO dto = NhaCungCapDTO.nhaCungCapMap.get(nhaCungCap);
