@@ -11,7 +11,7 @@
 ####################################
 
 
-PROJECT_PATH="/Users/luan.phm/engineering/Projects/ADongGroup/adg-services"
+PROJECT_PATH="/home/ubuntu/adg-services"
 SERVER_PROJECT_PATH="$PROJECT_PATH/adg-server"
 
 SOURCE="$SERVER_PROJECT_PATH/target"
