@@ -93,9 +93,16 @@ public class HoaDonService {
                 if (MapUtils.getString(record, PhieuNhapKhoHeaderMetadata.STT.name).equals("- Tổng số tiền (Viết bằng chữ):")) {
                     break;
                 }
-                record.put(PhieuNhapKhoHeaderMetadata.NhaCungCap.deAccentedName, ncc);
-                record.put(PhieuNhapKhoHeaderMetadata.SoHoaDon.deAccentedName, soHoaDon);
-                actualRecords.add(record);
+                Map<String, Object> actualRecord = new HashMap<>();
+                for (PhieuNhapKhoHeaderMetadata headerMetadata : PhieuNhapKhoHeaderMetadata.values()) {
+                    if (!headerMetadata.isOriginalField) {
+                        continue;
+                    }
+                    actualRecord.put(headerMetadata.deAccentedName, MapUtils.getString(record, headerMetadata.name));
+                }
+                actualRecord.put(PhieuNhapKhoHeaderMetadata.NhaCungCap.deAccentedName, ncc);
+                actualRecord.put(PhieuNhapKhoHeaderMetadata.SoHoaDon.deAccentedName, soHoaDon);
+                actualRecords.add(actualRecord);
             }
             donHangCuaNCC.put(soHoaDon, actualRecords);
             phieuNhapKhoByNCC.put(ncc, donHangCuaNCC);
@@ -224,7 +231,6 @@ public class HoaDonService {
         int sttGop = 0;
         int sttKhongGop = 1;
         for (Map<String, Object> record : records) {
-//            Map<String, Object> deAccentedRecord = this.deAccentAllKeys(record);
             String nhaCungCap = MapUtils.getString(record, HoaDonHeaderMetadata.NhaCungCap.deAccentedName);
             String soHoaDon = MapUtils.getString(record, HoaDonHeaderMetadata.SoHoaDon.deAccentedName);
             Map<String, Object> dsHoaDonNhaCungCap = MapUtils.getMapStringObject(mapByNhaCungCap, nhaCungCap, new HashMap<>());

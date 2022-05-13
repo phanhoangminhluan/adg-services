@@ -26,11 +26,14 @@ public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
             0,
             cell -> {
                 cell.setWidthType(TableWidthType.PCT);
-                cell.setWidth("8.1%");
+                cell.setWidth("8.4%");
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11)),
+            runs -> runs.forEach(run -> {
+                run.setFontSize(11);
+                run.setFontFamily("Times New Roman");
+            }),
             record -> MapUtils.getString(record, HoaDonHeaderMetadata.SoThuTuKhongGop.deAccentedName)
 
     ),
@@ -39,11 +42,14 @@ public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
             1,
             cell -> {
                 cell.setWidthType(TableWidthType.PCT);
-                cell.setWidth("14.1%");
+                cell.setWidth("13.8%");
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11)),
+            runs -> runs.forEach(run -> {
+                run.setFontSize(11);
+                run.setFontFamily("Times New Roman");
+            }),
             record -> MapUtils.getString(record, HoaDonHeaderMetadata.SoHoaDon.deAccentedName)
 
     ),
@@ -52,11 +58,14 @@ public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
             2,
             cell -> {
                 cell.setWidthType(TableWidthType.PCT);
-                cell.setWidth("15.1%");
+                cell.setWidth("16.3%");
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11)),
+            runs -> runs.forEach(run -> {
+                run.setFontSize(11);
+                run.setFontFamily("Times New Roman");
+            }),
             record -> MapUtils.getString(record, HoaDonHeaderMetadata.NgayChungTu.deAccentedName).split(" ")[0]
     ),
     SoTienTrenHoaDon(
@@ -64,11 +73,14 @@ public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
             3,
             cell -> {
                 cell.setWidthType(TableWidthType.PCT);
-                cell.setWidth("22%");
+                cell.setWidth("21.6%");
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11)),
+            runs -> runs.forEach(run -> {
+                run.setFontSize(11);
+                run.setFontFamily("Times New Roman");
+            }),
             record -> NumberUtils.formatNumber1(ParserUtils.toDouble(MapUtils.getString(record, HoaDonHeaderMetadata.TongTienThanhToan.deAccentedName)))
     ),
     ToChucXuatHoaDon(
@@ -76,11 +88,14 @@ public enum DonCamKetTableHeaderInfoMetadata implements AdgWordTableHeaderInfo {
             4,
             cell -> {
                 cell.setWidthType(TableWidthType.PCT);
-                cell.setWidth("40.5%");
+                cell.setWidth("39.8%");
                 cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
                 WordUtils.Table.makeCenter(cell);
             },
-            runs -> runs.forEach(run -> run.setFontSize(11)),
+            runs -> runs.forEach(run -> {
+                run.setFontSize(11);
+                run.setFontFamily("Times New Roman");
+            }),
             record -> {
                 String nhaCungCap = MapUtils.getString(record, HoaDonHeaderMetadata.NhaCungCap.deAccentedName);
                 NhaCungCapDTO dto = NhaCungCapDTO.nhaCungCapMap.get(nhaCungCap);

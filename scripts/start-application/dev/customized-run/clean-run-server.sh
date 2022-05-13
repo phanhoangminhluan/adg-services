@@ -11,12 +11,12 @@
 ####################################
 
 
-PROJECT_PATH="/home/ubuntu/adg-services"
+PROJECT_PATH="/Users/luan.phm/engineering/Projects/ADongGroup/adg-services"
 SERVER_PROJECT_PATH="$PROJECT_PATH/adg-server"
 
 SOURCE="$SERVER_PROJECT_PATH/target"
 LOG_DIR="$PROJECT_PATH/log"
-LOGBACK_PATH="$SERVER_PROJECT_PATH/src/main/resources/logback.xml"
+LOGBACK_PATH="$SERVER_PROJECT_PATH/src/main/resources/logback-dev.xml"
 
 JAR_PATH="$SOURCE/adg-server-1.0-SNAPSHOT.jar"
 LIB_PATH="$SOURCE/lib/*"
@@ -44,7 +44,7 @@ echo java \
 echo "RUNNING COMMAND: END ------------------------------------------------------------------------------------------------------------"
 echo ""
 
-nohup java \
+java \
   -Xms256M \
   -Xmx512M \
   -Dspring.profiles.active="$ACTIVE_PROFILE-$MODE" \

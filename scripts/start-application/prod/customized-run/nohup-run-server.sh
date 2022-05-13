@@ -16,7 +16,7 @@ SERVER_PROJECT_PATH="$PROJECT_PATH/adg-server"
 
 SOURCE="$SERVER_PROJECT_PATH/target"
 LOG_DIR="$PROJECT_PATH/log"
-LOGBACK_PATH="$SERVER_PROJECT_PATH/src/main/resources/logback.xml"
+LOGBACK_PATH="$SERVER_PROJECT_PATH/src/main/resources/logback-prod.xml"
 
 JAR_PATH="$SOURCE/adg-server-1.0-SNAPSHOT.jar"
 LIB_PATH="$SOURCE/lib/*"
@@ -28,12 +28,12 @@ CLASSES=$3
 
 cd $PROJECT_PATH
 
+mvn clean install
+
 echo ""
 echo "RUNNING COMMAND: START ------------------------------------------------------------------------------------------------------------"
 
 echo java \
-  -Xms256M \
-  -Xmx512M \
        -Dspring.profiles.active="$ACTIVE_PROFILE-$MODE" \
        -Dlogging.config="$LOGBACK_PATH" \
        -DACTIVE_PROFILE="$ACTIVE_PROFILE" \
@@ -44,7 +44,9 @@ echo java \
 echo "RUNNING COMMAND: END ------------------------------------------------------------------------------------------------------------"
 echo ""
 
-java \
+nohup java \
+  -Xms256M \
+  -Xmx512M \
   -Dspring.profiles.active="$ACTIVE_PROFILE-$MODE" \
   -Dlogging.config="$LOGBACK_PATH" \
   -DACTIVE_PROFILE="$ACTIVE_PROFILE" \
