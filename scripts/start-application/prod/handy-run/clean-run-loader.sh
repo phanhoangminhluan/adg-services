@@ -2,7 +2,7 @@
 
 
 PROJECT_PATH="/Users/luan.phm/engineering/Projects/ADongGroup/adg-services"
-SCRIPT_PATH="./scripts/start-application/customized-run/clean-run-server.sh"
+SCRIPT_PATH="./scripts/start-application/prod/customized-run/clean-run-server.sh"
 
 CLASSES="$PROJECT_PATH/adg-loader/target/classes"
 
