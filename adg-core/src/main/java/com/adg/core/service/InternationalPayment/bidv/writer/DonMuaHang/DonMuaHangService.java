@@ -29,7 +29,7 @@ public class DonMuaHangService {
     private ExcelTable excelTable;
     private Map<String, Object> data;
     private String outputFolder;
-    private String soHoaDon;
+    private String ncc;
 
     private static class DonMuaHangAddress {
         public static final String TEN_NCC = "B8";
@@ -45,7 +45,7 @@ public class DonMuaHangService {
 
     private final static String template = "./adg-server/src/main/resources/bidv/ĐƠN MUA HÀNG.xlsx";
 
-    public DonMuaHangService(String outputFolder, List<Map<String, Object>> phieuNhapKhoRecords, String soHoaDon) {
+    public DonMuaHangService(String outputFolder, List<Map<String, Object>> phieuNhapKhoRecords, String ncc) {
         this.outputFolder = outputFolder;
         this.excelWriter = new ExcelWriter(template);
         this.excelWriter.openSheet();
@@ -54,7 +54,7 @@ public class DonMuaHangService {
                 AdgExcelTableHeaderMetadata.getDonMuaHang()
         );
         this.data = this.transformHoaDonRecords(phieuNhapKhoRecords);
-        this.soHoaDon = soHoaDon;
+        this.ncc = ncc;
     }
 
     public void exportDocument() {
@@ -68,7 +68,7 @@ public class DonMuaHangService {
     private void build() {
         String fileName = String.format("Đơn mua hàng - %s - %s - %s.xlsx",
                 MapUtils.getString(data, "Tên NCC"),
-                this.soHoaDon,
+                this.ncc,
                 DateTimeUtils.convertZonedDateTimeToFormat(ZonedDateTime.now(), "Asia/Ho_Chi_Minh", DateTimeUtils.MA_DATE_TIME_FORMATTER)
         );
         this.excelWriter.build(this.outputFolder + "/" + fileName);
