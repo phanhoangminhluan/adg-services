@@ -41,6 +41,7 @@ public class SaleOrderConsumerService extends AbstractConsumerService {
     public void consume(ConsumerRecord<String, String> consumerRecord, Acknowledgment acknowledgment) {
         super.consume(consumerRecord, acknowledgment);
         OrderDTO dto = JsonUtils.fromJson(consumerRecord.value(), OrderDTO.class);
+        System.out.println(String.format("Order saved: %s - %s", dto.getAsyncId(), dto.getCreatedDate()));
         orderService.save(dto);
     }
 
