@@ -132,7 +132,7 @@ public class HoaDonService {
             String ncc = MapUtils.getString(pnk, PhieuNhapKhoHeaderMetadata.NhaCungCap.deAccentedName);
             String soHoaDon = MapUtils.getString(pnk, PhieuNhapKhoHeaderMetadata.SoHoaDon.deAccentedName);
 
-            Map<String, Object> hoaDonCuaNcc = MapUtils.getMapStringObject(pnk, ncc, new HashMap<>());
+            Map<String, Object> hoaDonCuaNcc = MapUtils.getMapStringObject(mapPnk, ncc, new HashMap<>());
 
             List<Map<String, Object>> sanPhamCuaHoaDon = MapUtils.getListMapStringObject(hoaDonCuaNcc, soHoaDon, new ArrayList<>());
             sanPhamCuaHoaDon.add(pnk);
