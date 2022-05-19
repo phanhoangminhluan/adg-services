@@ -215,13 +215,11 @@ public class HoaDonService {
 
         for (String ncc : phieuNhapKhoMap.keySet()) {
             Map<String, Object> donHangMap = MapUtils.getMapStringObject(phieuNhapKhoMap, ncc);
-            List<Map<String, Object>> listMaHang = new ArrayList<>();
             for (String soHoaDon : donHangMap.keySet()) {
-                listMaHang.addAll( MapUtils.getListMapStringObject(donHangMap, soHoaDon));
+                DonMuaHangService donMuaHangService = new DonMuaHangService(folder, MapUtils.getListMapStringObject(donHangMap, soHoaDon), ncc);
+                donMuaHangService.exportDocument();
+                logger.info("Export DonMuaHangService");
             }
-            DonMuaHangService donMuaHangService = new DonMuaHangService(folder, listMaHang, ncc);
-            donMuaHangService.exportDocument();
-            logger.info("Export DonMuaHangService");
         }
     }
 

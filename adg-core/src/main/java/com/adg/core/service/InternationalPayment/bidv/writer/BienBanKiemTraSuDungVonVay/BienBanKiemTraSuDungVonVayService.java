@@ -87,6 +87,7 @@ public class BienBanKiemTraSuDungVonVayService {
         XWPFTableCell sumCell = WordUtils.Table.mergeCell(row, 0, 3);
         sumCell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
         XWPFRun run = WordUtils.Table.setCell(sumCell, "Tổng");
+        run.setFontFamily("Times New Roman");
         run.setBold(true);
         run.setFontSize(11);
         WordUtils.Table.makeCenter(sumCell);
@@ -94,7 +95,9 @@ public class BienBanKiemTraSuDungVonVayService {
         XWPFTableCell calculatedSell = WordUtils.Table.mergeCell(row, 1, 2);
         calculatedSell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
         String val = String.format("%s VND (Bằng chữ: %s.)", MapUtils.getString(data, "Tổng tiền vay bằng số"), MapUtils.getString(data, "Tổng tiền vay bằng chữ"));
-        WordUtils.Table.setCell(calculatedSell, val).setFontSize(11);
+        XWPFRun calculatedCellRun = WordUtils.Table.setCell(calculatedSell, val);
+        calculatedCellRun.setFontSize(11);
+        calculatedCellRun.setFontFamily("Times New Roman");
         WordUtils.Table.makeCenter(calculatedSell);
 
     }
