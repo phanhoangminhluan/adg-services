@@ -48,7 +48,6 @@ echo ""
 
 java \
   -Dspring.profiles.active="$ACTIVE_PROFILE-$MODE" \
-  -Dlogging.config="$LOGBACK_PATH" \
   -DACTIVE_PROFILE="$ACTIVE_PROFILE" \
   -DLOG_DIR="$LOG_DIR" \
   -classpath "$JAR_PATH:$LIB_PATH:$CORE_CLASSES:$CLASSES" \
