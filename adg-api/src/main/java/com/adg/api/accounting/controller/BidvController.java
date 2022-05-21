@@ -31,6 +31,10 @@ public class BidvController {
     @Value("${international-payment.bidv.input.zip}")
     private String inputZip;
 
+    @GetMapping
+    public String hello() {
+        return "ok";
+    }
 
     @PostMapping("import")
     @SneakyThrows
